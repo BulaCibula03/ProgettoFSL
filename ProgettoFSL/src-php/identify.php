@@ -25,10 +25,7 @@
     }
     $sql= "SELECT id, password FROM utenti WHERE username=:username";
     $stmt= $pdo->prepare($sql);
-    $stmt->execute([
-        "username" => $username
-    ]);
-
+    
     $admin= $stmt->fetch(PDO::FETCH_ASSOC);
     if (!$admin) {
         http_response_code(401);

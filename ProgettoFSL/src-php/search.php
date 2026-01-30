@@ -25,19 +25,19 @@
     $tipo= $_POST["type"];
 
     if($tipo==="studente"){
-        $sql= "select * from studenti where studente_id=:studente_id";
+        $sql= "select * from studenti where studente.id=:studente_id";
         $params= [];
     }else if($tipo==="docente"){
-        $sql= "select * from docenti where docente_id=:docente_id";
+        $sql= "select * from docenti where docente.id=:docente_id";
         $params= [];
     }else if($tipo==="corso"){
-        $sql= "select * from corsi where corso_id=:corso_id";
+        $sql= "select * from corsi where corso.id=:corso_id";
         $params= [];
     }else if($tipo==="azienda"){
-        $sql= "select * from aziende where azienda_id=:azienda_id";
+        $sql= "select * from aziende where azienda.id=:azienda_id";
         $params= [];
     }else if($tipo==="tirocinio"){
-        $sql= "select * from tirocini where tirocinio_id=:tirocinio_id";
+        $sql= "select * from tirocini where tirocinio.id=:tirocinio_id";
         $params= [];
     }
 

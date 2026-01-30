@@ -25,19 +25,19 @@
     $tipo= $_POST["type"];
 
     if($tipo==="studente"){
-        $sql= "DELETE FROM studenti WHERE studente_id=:studente_id";
+        $sql= "DELETE FROM studenti WHERE studente.id=:studente_id";
         $params= [];
     }else if($tipo==="docente"){
-        $sql= "DELETE FROM docenti WHERE docente_id=:docente_id";
+        $sql= "DELETE FROM docenti WHERE docente.id=:docente_id";
         $params= [];
     }else if($tipo==="corso"){
-        $sql= "DELETE FROM corsi WHERE corso_id=:corso_id";
+        $sql= "DELETE FROM corsi WHERE corso.id=:corso_id";
         $params= [];
     }else if($tipo==="azienda"){
-        $sql= "DELETE FROM aziende WHERE azienda_id=:azienda_id";
+        $sql= "DELETE FROM aziende WHERE azienda.id=:azienda_id";
         $params= [];
     }else if($tipo==="tirocinio"){
-        $sql= "DELETE FROM tirocini WHERE tirocinio_id=:tirocinio_id";
+        $sql= "DELETE FROM tirocini WHERE tirocinio.id=:tirocinio_id";
         $params= [];
     }
     
