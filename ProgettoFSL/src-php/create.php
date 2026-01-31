@@ -1,8 +1,7 @@
 <?php
-    $host= "localhost";
-    $db= "er_pcto";
-    $user= "utente";
-    $pw= "";
+    include "_noncachare.php";
+    include "_db.php";
+    header("Content-Type: application/json; charset=utf-8");
     try{
         $pdo=new PDO(
             "mysql:host=$host;dbname=$db;charset=utf8",
