@@ -16,9 +16,9 @@
     }
 
     $dato= $_POST["data"] ?? null;
-    if(!isset($_POST["type"])){
+    if(!isset($_POST["data"])){
         http_response_code(400);
-        echo "Tipo mancante";
+        echo "Dato mancante";
         exit;
     }
     $tipo= $_POST["type"];
