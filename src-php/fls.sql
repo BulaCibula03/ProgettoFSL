@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Feb 02, 2026 alle 12:55
+-- Creato il: Feb 06, 2026 alle 12:22
 -- Versione del server: 10.4.32-MariaDB
 -- Versione PHP: 8.2.12
 
@@ -20,6 +20,75 @@ SET time_zone = "+00:00";
 --
 -- Database: `fls`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `azienda`
+--
+
+CREATE TABLE `azienda` (
+  `id` int(11) NOT NULL,
+  `nome` varchar(255) NOT NULL,
+  `natura` int(11) DEFAULT NULL,
+  `comune_sl` int(11) DEFAULT NULL,
+  `indirizzo_sl` varchar(255) DEFAULT NULL,
+  `comune` int(11) DEFAULT NULL,
+  `indirizzo` varchar(255) DEFAULT NULL,
+  `cod_fiscale` varchar(16) DEFAULT NULL,
+  `part_iva` varchar(15) DEFAULT NULL,
+  `tel` varchar(50) DEFAULT NULL,
+  `mail` varchar(255) DEFAULT NULL,
+  `sito` varchar(255) DEFAULT NULL,
+  `leg_rapp_nome` varchar(255) DEFAULT NULL,
+  `leg_rapp_nato_a` int(11) DEFAULT NULL,
+  `leg_rapp_dt` datetime DEFAULT NULL,
+  `leg_rapp_cf` varchar(16) DEFAULT NULL,
+  `leg_tel` varchar(50) DEFAULT NULL,
+  `leg_note` varchar(255) DEFAULT NULL,
+  `note` varchar(255) DEFAULT NULL,
+  `ateco` varchar(20) DEFAULT NULL,
+  `check` bit(1) DEFAULT b'0',
+  `nproto` int(11) DEFAULT NULL,
+  `dproto` datetime DEFAULT NULL,
+  `firma` bit(1) DEFAULT b'0',
+  `attiva` bit(1) DEFAULT b'1',
+  `prncct` bit(1) DEFAULT b'0',
+  `idDocente` int(11) DEFAULT NULL,
+  `sportiva` bit(1) DEFAULT b'0',
+  `inglese` bit(1) DEFAULT b'0'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `azienda_tipo`
+--
+
+CREATE TABLE `azienda_tipo` (
+  `id` int(11) NOT NULL,
+  `natura` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dump dei dati per la tabella `azienda_tipo`
+--
+
+INSERT INTO `azienda_tipo` (`id`, `natura`) VALUES
+(1, 'S.r.l.'),
+(2, 'S.p.A.'),
+(3, 'Società unipersonale'),
+(4, 'Azienda Agricola'),
+(5, '(nd)'),
+(6, 'S.n.c.'),
+(7, 'S.a.s'),
+(8, 'S.r.l.s.'),
+(9, 'Comune'),
+(13, 'Fondazione'),
+(14, 'Istituzione scolastica'),
+(15, 'Associazione ONLUS'),
+(16, 'Società cooperativa'),
+(17, 'Società sportiva');
 
 -- --------------------------------------------------------
 
@@ -8365,7 +8434,7 @@ INSERT INTO `comune` (`idComune`, `Istat`, `Comune`, `Provincia`, `Regione`, `Pr
 --
 
 CREATE TABLE `corso` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `idtipo` int(11) DEFAULT NULL,
   `idmodo` int(11) DEFAULT NULL,
   `annoScolastico` int(11) DEFAULT NULL,
@@ -8388,7 +8457,7 @@ CREATE TABLE `corso` (
 CREATE TABLE `corso_iscritti` (
   `id` int(11) NOT NULL,
   `idcorso` int(11) DEFAULT NULL,
-  `idiscritto` varchar(16) DEFAULT NULL,
+  `idiscritto` int(11) DEFAULT NULL,
   `orepres` int(11) DEFAULT NULL,
   `superato` bit(1) DEFAULT b'0',
   `supplettivo` bit(1) DEFAULT b'0',
@@ -8650,11 +8719,50 @@ CREATE TABLE `studstorico` (
 -- --------------------------------------------------------
 
 --
+-- Struttura della tabella `tirocinio`
+--
+
+CREATE TABLE `tirocinio` (
+  `id` int(11) NOT NULL,
+  `idStudente` int(11) DEFAULT NULL,
+  `oreEffettuate` smallint(6) DEFAULT NULL,
+  `classe` varchar(10) DEFAULT NULL,
+  `annoScolastico` int(11) DEFAULT NULL,
+  `tutor` int(11) DEFAULT NULL,
+  `dataPfi` datetime DEFAULT NULL,
+  `data_inizioEff` datetime DEFAULT NULL,
+  `data_fineEff` datetime DEFAULT NULL,
+  `giudizio` smallint(6) DEFAULT NULL,
+  `valutazione` smallint(6) DEFAULT NULL,
+  `invioMail` bit(1) DEFAULT b'0',
+  `restpfi` bit(1) DEFAULT b'0',
+  `restsva` bit(1) DEFAULT b'0',
+  `restsvs` bit(1) DEFAULT b'0',
+  `restffp` bit(1) DEFAULT b'0',
+  `note` varchar(30) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `tirociniovoti`
+--
+
+CREATE TABLE `tirociniovoti` (
+  `id` smallint(6) NOT NULL,
+  `voto` varchar(20) DEFAULT NULL,
+  `attivo` bit(1) DEFAULT b'1',
+  `az_st` bit(1) DEFAULT b'1'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Struttura della tabella `tutor`
 --
 
 CREATE TABLE `tutor` (
-  `idT` int(11) NOT NULL,
+  `id` int(11) NOT NULL,
   `nome` varchar(80) DEFAULT NULL,
   `idA` int(11) DEFAULT NULL,
   `tel` varchar(15) DEFAULT NULL,
@@ -8721,6 +8829,20 @@ CREATE TABLE `weblog` (
 --
 
 --
+-- Indici per le tabelle `azienda`
+--
+ALTER TABLE `azienda`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `nome_UNIQUE` (`nome`),
+  ADD KEY `idDocente` (`idDocente`);
+
+--
+-- Indici per le tabelle `azienda_tipo`
+--
+ALTER TABLE `azienda_tipo`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indici per le tabelle `comune`
 --
 ALTER TABLE `comune`
@@ -8730,13 +8852,17 @@ ALTER TABLE `comune`
 -- Indici per le tabelle `corso`
 --
 ALTER TABLE `corso`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idtipo` (`idtipo`),
+  ADD KEY `idmodo` (`idmodo`);
 
 --
 -- Indici per le tabelle `corso_iscritti`
 --
 ALTER TABLE `corso_iscritti`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idcorso` (`idcorso`),
+  ADD KEY `idiscritto` (`idiscritto`);
 
 --
 -- Indici per le tabelle `corso_modo`
@@ -8754,7 +8880,8 @@ ALTER TABLE `corso_tipo`
 -- Indici per le tabelle `docente`
 --
 ALTER TABLE `docente`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `tipo` (`tipo`);
 
 --
 -- Indici per le tabelle `docente_tipo`
@@ -8775,16 +8902,13 @@ ALTER TABLE `firma`
   ADD PRIMARY KEY (`annoScolastico`);
 
 --
--- Indici per le tabelle `luogo`
---
-ALTER TABLE `luogo`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indici per le tabelle `slot`
 --
 ALTER TABLE `slot`
-  ADD PRIMARY KEY (`idS`);
+  ADD KEY `idAzienda` (`idAzienda`),
+  ADD KEY `idtirocinio` (`idtirocinio`),
+  ADD KEY `impiego` (`impiego`),
+  ADD KEY `tipo` (`tipo`);
 
 --
 -- Indici per le tabelle `slotimpiego`
@@ -8802,13 +8926,31 @@ ALTER TABLE `slottipo`
 -- Indici per le tabelle `studente`
 --
 ALTER TABLE `studente`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idGenitore1` (`idGenitore1`),
+  ADD KEY `idGenitore2` (`idGenitore2`);
+
+--
+-- Indici per le tabelle `tirocinio`
+--
+ALTER TABLE `tirocinio`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idStudente` (`idStudente`),
+  ADD KEY `tutor` (`tutor`);
+
+--
+-- Indici per le tabelle `tirociniovoti`
+--
+ALTER TABLE `tirociniovoti`
   ADD PRIMARY KEY (`id`);
 
 --
 -- Indici per le tabelle `tutor`
 --
 ALTER TABLE `tutor`
-  ADD PRIMARY KEY (`idT`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idInquad` (`idInquad`),
+  ADD KEY `idA` (`idA`);
 
 --
 -- Indici per le tabelle `tutorinquadr`
@@ -8820,77 +8962,31 @@ ALTER TABLE `tutorinquadr`
 -- Indici per le tabelle `tut_tir`
 --
 ALTER TABLE `tut_tir`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indici per le tabelle `utente`
---
-ALTER TABLE `utente`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indici per le tabelle `weblog`
---
-ALTER TABLE `weblog`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idTutor` (`idTutor`),
+  ADD KEY `idTirocinio` (`idTirocinio`);
 
 --
 -- AUTO_INCREMENT per le tabelle scaricate
 --
 
 --
--- AUTO_INCREMENT per la tabella `comune`
+-- AUTO_INCREMENT per la tabella `azienda`
 --
-ALTER TABLE `comune`
-  MODIFY `idComune` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8305;
+ALTER TABLE `azienda`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT per la tabella `azienda_tipo`
+--
+ALTER TABLE `azienda_tipo`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT per la tabella `corso`
 --
 ALTER TABLE `corso`
-  MODIFY `idcorso` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT per la tabella `corso_iscritti`
---
-ALTER TABLE `corso_iscritti`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT per la tabella `corso_modo`
---
-ALTER TABLE `corso_modo`
-  MODIFY `idmodo` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT per la tabella `corso_tipo`
---
-ALTER TABLE `corso_tipo`
-  MODIFY `idtipo` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT per la tabella `docente`
---
-ALTER TABLE `docente`
-  MODIFY `n` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT per la tabella `famiglia`
---
-ALTER TABLE `famiglia`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT per la tabella `luogo`
---
-ALTER TABLE `luogo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT per la tabella `slot`
---
-ALTER TABLE `slot`
-  MODIFY `idS` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT per la tabella `slotimpiego`
@@ -8911,10 +9007,22 @@ ALTER TABLE `studente`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT per la tabella `tirocinio`
+--
+ALTER TABLE `tirocinio`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT per la tabella `tirociniovoti`
+--
+ALTER TABLE `tirociniovoti`
+  MODIFY `id` smallint(6) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT per la tabella `tutor`
 --
 ALTER TABLE `tutor`
-  MODIFY `idT` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT per la tabella `tutorinquadr`
@@ -8929,16 +9037,71 @@ ALTER TABLE `tut_tir`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT per la tabella `utente`
+-- Limiti per le tabelle scaricate
 --
-ALTER TABLE `utente`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT per la tabella `weblog`
+-- Limiti per la tabella `azienda`
 --
-ALTER TABLE `weblog`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `azienda`
+  ADD CONSTRAINT `azienda_ibfk_1` FOREIGN KEY (`idDocente`) REFERENCES `docente` (`id`);
+
+--
+-- Limiti per la tabella `corso`
+--
+ALTER TABLE `corso`
+  ADD CONSTRAINT `corso_ibfk_1` FOREIGN KEY (`idtipo`) REFERENCES `corso_tipo` (`idtipo`),
+  ADD CONSTRAINT `corso_ibfk_2` FOREIGN KEY (`idmodo`) REFERENCES `corso_modo` (`idmodo`);
+
+--
+-- Limiti per la tabella `corso_iscritti`
+--
+ALTER TABLE `corso_iscritti`
+  ADD CONSTRAINT `corso_iscritti_ibfk_1` FOREIGN KEY (`idcorso`) REFERENCES `corso` (`id`),
+  ADD CONSTRAINT `corso_iscritti_ibfk_2` FOREIGN KEY (`idiscritto`) REFERENCES `studente` (`id`);
+
+--
+-- Limiti per la tabella `docente`
+--
+ALTER TABLE `docente`
+  ADD CONSTRAINT `docente_ibfk_1` FOREIGN KEY (`tipo`) REFERENCES `docente_tipo` (`idD`);
+
+--
+-- Limiti per la tabella `slot`
+--
+ALTER TABLE `slot`
+  ADD CONSTRAINT `slot_ibfk_1` FOREIGN KEY (`idAzienda`) REFERENCES `azienda` (`id`),
+  ADD CONSTRAINT `slot_ibfk_2` FOREIGN KEY (`idtirocinio`) REFERENCES `tirocinio` (`id`),
+  ADD CONSTRAINT `slot_ibfk_3` FOREIGN KEY (`impiego`) REFERENCES `slotimpiego` (`id`),
+  ADD CONSTRAINT `slot_ibfk_4` FOREIGN KEY (`tipo`) REFERENCES `slottipo` (`id`);
+
+--
+-- Limiti per la tabella `studente`
+--
+ALTER TABLE `studente`
+  ADD CONSTRAINT `studente_ibfk_1` FOREIGN KEY (`idGenitore1`) REFERENCES `famiglia` (`id`),
+  ADD CONSTRAINT `studente_ibfk_2` FOREIGN KEY (`idGenitore2`) REFERENCES `famiglia` (`id`);
+
+--
+-- Limiti per la tabella `tirocinio`
+--
+ALTER TABLE `tirocinio`
+  ADD CONSTRAINT `tirocinio_ibfk_1` FOREIGN KEY (`idStudente`) REFERENCES `studente` (`id`),
+  ADD CONSTRAINT `tirocinio_ibfk_2` FOREIGN KEY (`tutor`) REFERENCES `tutor` (`id`);
+
+--
+-- Limiti per la tabella `tutor`
+--
+ALTER TABLE `tutor`
+  ADD CONSTRAINT `tutor_ibfk_1` FOREIGN KEY (`idInquad`) REFERENCES `tutorinquadr` (`idInquad`),
+  ADD CONSTRAINT `tutor_ibfk_2` FOREIGN KEY (`idA`) REFERENCES `azienda` (`id`);
+
+--
+-- Limiti per la tabella `tut_tir`
+--
+ALTER TABLE `tut_tir`
+  ADD CONSTRAINT `tut_tir_ibfk_1` FOREIGN KEY (`idTutor`) REFERENCES `tutor` (`id`),
+  ADD CONSTRAINT `tut_tir_ibfk_2` FOREIGN KEY (`idTirocinio`) REFERENCES `tirocinio` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
