@@ -76,11 +76,25 @@
             ":enteEsterno"=> $_POST["enteEsterno"] ?? null
         ];
     }else if($tipo==="azienda"){
-        $sql= "INSERT INTO aziende (nome, indirizzo) VALUES (:nome, :indirizzo)";
-        $params= [];
-    }else if($tipo==="tirocinio"){
-        $sql= "INSERT INTO tirocini (studente_id, azienda_id, corso_id, data_inizio, data_fine) VALUES (:studente_id, :azienda_id, :corso_id, :data_inizio, :data_fine)";
-        $params= [];
+        $sql= "INSERT INTO aziende (nome,natura,comune_sl,indirizzo_sl,comune,indirizzo,cod_fiscale,part_iva,tel,mail,sito,leg_rapp_nome,leg_rapp_nato_a,leg_rapp_dt,leg_rapp_cf,leg_tel,leg_note,note,ateco,'check',nproto,dproto,firma,attiva,prncct,idDocente,sportiva,inglese) VALUES (:id,:nome,:natura,:comune_sl,:indirizzo_sl,:comune,:indirizzo,:cod_fiscale,:part_iva,:tel,:mail,:sito,:leg_rapp_nome,:leg_rapp_nato_a,:leg_rapp_dt,:leg_rapp_cf,:leg_tel,:leg_note,:note,:ateco,':check',:nproto,:dproto,:firma,:attiva,:prncct,:idDocente,:sportiva,:inglese)";
+        $params= [
+            ":studente_id"=> $_POST["studente_id"] ?? null,
+            ":oreEffettuate"=> $_POST["oreEffettuate"] ?? null,
+            ":classe"=> $_POST["classe"] ?? null,
+            ":annoScolastico"=> $_POST["annoScolastico"] ?? null,
+            ":tutor"=> $_POST["tutor"] ?? null,
+            ":dataPfi"=> $_POST["dataPfi"] ?? null,
+            ":data_inizioEff"=> $_POST["data_inizioEff"] ?? null,
+            ":data_fineEff"=> $_POST["data_fineEff"] ?? null,
+            ":giudizio"=> $_POST["giudizio"] ?? null,
+            ":valutazione"=> $_POST["valutazione"] ?? null,
+            ":invioMail"=> $_POST["invioMail"] ?? null,
+            ":restpfi"=> $_POST["restpfi"] ?? null,
+            ":restsva"=> $_POST["restsva"] ?? null,
+            ":restsvs"=> $_POST["restsvs"] ?? null,
+            ":restffp"=> $_POST["restffp"] ?? null,
+            ":note"=> $_POST["note"] ?? null
+        ];
     }else{
         http_response_code(400);
         echo "Tipo non valido";
