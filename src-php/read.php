@@ -30,7 +30,7 @@
         $sql= "select * from docenti";
         $params= [];
     }else if($tipo==="corso"){
-        $sql= "select * from corsi";
+        $sql= "select * from corso";
         $params= [];
     }else if($tipo==="azienda"){
         $sql= "select * from aziende";
@@ -38,8 +38,11 @@
     }else if($tipo==="tirocinio"){
         $sql= "select * from tirocini";
         $params= [];
+    }else{
+        http_response_code(400);
+        echo "Tipo non valido";
+        exit;
     }
-
     try{
         $stmt= $pdo->prepare($sql);
         $stmt->execute($params);

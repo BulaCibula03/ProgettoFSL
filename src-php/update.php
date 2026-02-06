@@ -24,20 +24,24 @@
     $tipo= $_POST["type"];
 
     if($tipo==="studente"){
-        $sql= "UPDATE studenti SET nome=:nome, email=:email WHERE studente.id=:studente_id";
+        $sql= "UPDATE studenti SET cognome=:cognome, nome=:nome, email1=:email1, email2=:email2, matricola=:matricola WHERE studente.id=:studente_id";
         $params= [];
     }else if($tipo==="docente"){
         $sql= "UPDATE docenti SET nome=:nome, email=:email WHERE docente.id=:docente_id";
         $params= [];
     }else if($tipo==="corso"){
-        $sql= "UPDATE corsi SET nome=:nome, descrizione=:descrizione WHERE corso.id=:corso_id";
+        $sql= "UPDATE corso SET nome=:nome, descrizione=:descrizione WHERE corso.id=:corso_id";
         $params= [];
     }else if($tipo==="azienda"){
         $sql= "UPDATE aziende SET nome=:nome, indirizzo=:indirizzo WHERE azienda.id=:azienda_id";
         $params= [];
     }else if($tipo==="tirocinio"){
-        $sql= "UPDATE tirocini SET studente.id=:studente_id, azienda.id=:azienda_id, corso.id=:corso_id, data.inizio=:data_inizio, data.fine=:data_fine WHERE tirocinio.id=:tirocinio_id";
+        $sql= "UPDATE tirocini SET id=:id, azienda_id=:azienda_id, corso_id=:corso_id, data_inizio=:data_inizio, data_fine=:data_fine WHERE tirocinio.id=:tirocinio_id";
         $params= [];
+    }else{
+        http_response_code(400);
+        echo "Tipo non valido";
+        exit;
     }
     
     try{

@@ -30,7 +30,7 @@
         $sql= "select * from docenti where docente.id=:docente_id";
         $params= [];
     }else if($tipo==="corso"){
-        $sql= "select * from corsi where corso.id=:corso_id";
+        $sql= "select * from corso where corso.id=:corso_id";
         $params= [];
     }else if($tipo==="azienda"){
         $sql= "select * from aziende where azienda.id=:azienda_id";
@@ -38,6 +38,10 @@
     }else if($tipo==="tirocinio"){
         $sql= "select * from tirocini where tirocinio.id=:tirocinio_id";
         $params= [];
+    }else{
+        http_response_code(400);
+        echo "Tipo non valido";
+        exit;
     }
 
     try{

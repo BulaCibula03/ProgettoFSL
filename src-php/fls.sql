@@ -8365,13 +8365,13 @@ INSERT INTO `comune` (`idComune`, `Istat`, `Comune`, `Provincia`, `Regione`, `Pr
 --
 
 CREATE TABLE `corso` (
-  `idcorso` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `idtipo` int(11) DEFAULT NULL,
   `idmodo` int(11) DEFAULT NULL,
-  `annos` int(11) DEFAULT NULL,
-  `descr` varchar(50) DEFAULT NULL,
-  `datai` datetime DEFAULT NULL,
-  `dataf` datetime DEFAULT NULL,
+  `annoScolastico` int(11) DEFAULT NULL,
+  `descrizione` varchar(50) DEFAULT NULL,
+  `data_inizio` datetime DEFAULT NULL,
+  `data_fine` datetime DEFAULT NULL,
   `ore` int(11) DEFAULT NULL,
   `docente` varchar(16) DEFAULT NULL,
   `esterno` bit(1) DEFAULT b'0',
@@ -8429,9 +8429,9 @@ CREATE TABLE `corso_tipo` (
 --
 
 CREATE TABLE `docente` (
-  `n` int(11) NOT NULL,
+  `id` int(11) NOT NULL,
   `nominativo` varchar(80) DEFAULT NULL,
-  `datan` datetime DEFAULT NULL,
+  `data_nascita` datetime DEFAULT NULL,
   `luogo` varchar(120) DEFAULT NULL,
   `cf` varchar(16) DEFAULT NULL,
   `indirizzo` varchar(255) DEFAULT NULL,
@@ -8489,7 +8489,7 @@ CREATE TABLE `famiglia` (
 --
 
 CREATE TABLE `firma` (
-  `annos` int(11) NOT NULL,
+  `annoScolastico` int(11) NOT NULL,
   `dirigente` varchar(80) NOT NULL,
   `assicurazione` varchar(40) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
@@ -8498,7 +8498,7 @@ CREATE TABLE `firma` (
 -- Dump dei dati per la tabella `firma`
 --
 
-INSERT INTO `firma` (`annos`, `dirigente`, `assicurazione`) VALUES
+INSERT INTO `firma` (`annoScolastico`, `dirigente`, `assicurazione`) VALUES
 (2013, 'Prof.ssa Laura Parazzi', ''),
 (2014, 'Prof.Angelo Bettinelli', ''),
 (2015, 'Prof.Angelo Bettinelli', ''),
@@ -8537,7 +8537,7 @@ CREATE TABLE `luogo` (
 CREATE TABLE `slot` (
   `idS` int(11) NOT NULL,
   `idAzienda` int(11) DEFAULT NULL,
-  `annos` smallint(6) DEFAULT NULL,
+  `annoScolastico` smallint(6) DEFAULT NULL,
   `datai` datetime DEFAULT NULL,
   `dataf` datetime DEFAULT NULL,
   `oreprev` smallint(6) DEFAULT NULL,
@@ -8616,7 +8616,7 @@ CREATE TABLE `studente` (
   `matricola` varchar(256) NOT NULL,
   `cittadinanza` varchar(256) NOT NULL,
   `sesso` varchar(256) NOT NULL,
-  `data` date NOT NULL,
+  `data_nascita` date NOT NULL,
   `cellulare allievo` int(11) NOT NULL,
   `cellulare emergenza 1` int(10) NOT NULL,
   `cellulare emergenza 2` int(10) NOT NULL,
@@ -8730,7 +8730,7 @@ ALTER TABLE `comune`
 -- Indici per le tabelle `corso`
 --
 ALTER TABLE `corso`
-  ADD PRIMARY KEY (`idcorso`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indici per le tabelle `corso_iscritti`
@@ -8754,7 +8754,7 @@ ALTER TABLE `corso_tipo`
 -- Indici per le tabelle `docente`
 --
 ALTER TABLE `docente`
-  ADD PRIMARY KEY (`n`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indici per le tabelle `docente_tipo`
@@ -8772,7 +8772,7 @@ ALTER TABLE `famiglia`
 -- Indici per le tabelle `firma`
 --
 ALTER TABLE `firma`
-  ADD PRIMARY KEY (`annos`);
+  ADD PRIMARY KEY (`annoScolastico`);
 
 --
 -- Indici per le tabelle `luogo`

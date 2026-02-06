@@ -30,7 +30,7 @@
         $sql= "DELETE FROM docenti WHERE docente.id=:docente_id";
         $params= [];
     }else if($tipo==="corso"){
-        $sql= "DELETE FROM corsi WHERE corso.id=:corso_id";
+        $sql= "DELETE FROM corso WHERE corso.id=:corso_id";
         $params= [];
     }else if($tipo==="azienda"){
         $sql= "DELETE FROM aziende WHERE azienda.id=:azienda_id";
@@ -38,8 +38,11 @@
     }else if($tipo==="tirocinio"){
         $sql= "DELETE FROM tirocini WHERE tirocinio.id=:tirocinio_id";
         $params= [];
+    }else{
+        http_response_code(400);
+        echo "Tipo non valido";
+        exit;
     }
-    
     try{
         $stmt= $pdo->prepare($sql);
         $stmt->execute($params);
