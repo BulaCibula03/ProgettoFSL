@@ -95,6 +95,26 @@
             ":restffp"=> $_POST["restffp"] ?? null,
             ":note"=> $_POST["note"] ?? null
         ];
+    }else if($tipo==="slot"){
+        $sql= "INSERT INTO slot (idS,idAzienda,annoScolastico,datai,dataf,oreprev,idtirocinio,tipo,impiego,schi,sinf,smec,slst,note,attivita,idCreatore) VALUES (:idS,:idAzienda,:annoScolastico,:datai,:dataf,:oreprev,:idtirocinio,:tipo,:impiego,:schi,:sinf,:smec,:slst,:note,:attivita,:idCreatore)";
+        $params= [
+            ":idS"=> $_POST["idS"] ?? null,
+            ":idAzienda"=> $_POST["idAzienda"] ?? null,
+            ":annoScolastico"=> $_POST["annoScolastico"] ?? null,
+            ":datai"=> $_POST["datai"] ?? null,
+            ":dataf"=> $_POST["dataf"] ?? null,
+            ":oreprev"=> $_POST["oreprev"] ?? null,
+            ":idtirocinio"=> $_POST["idtirocinio"] ?? null,
+            ":tipo"=> $_POST["tipo"] ?? null,
+            ":impiego"=> $_POST["impiego"] ?? null,
+            ":schi"=> $_POST["schi"] ?? null,
+            ":sinf"=> $_POST["sinf"] ?? null,
+            ":smec"=> $_POST["smec"] ?? null,
+            ":slst"=> $_POST["slst"] ?? null,
+            ":note"=> $_POST["note"] ?? null,
+            ":attivita"=> $_POST["attivita"] ?? null,
+            ":idCreatore"=> $_POST["idCreatore"] ?? null
+        ];
     }else{
         http_response_code(400);
         echo "Tipo non valido";

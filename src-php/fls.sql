@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Feb 06, 2026 alle 12:22
+-- Creato il: Feb 07, 2026 alle 09:02
 -- Versione del server: 10.4.32-MariaDB
 -- Versione PHP: 8.2.12
 
@@ -89,6 +89,20 @@ INSERT INTO `azienda_tipo` (`id`, `natura`) VALUES
 (15, 'Associazione ONLUS'),
 (16, 'Società cooperativa'),
 (17, 'Società sportiva');
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `classi`
+--
+
+CREATE TABLE `classi` (
+  `id` int(11) NOT NULL,
+  `anno scolastico` int(11) NOT NULL,
+  `indirizzo` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `sezione` char(1) NOT NULL,
+  `idCoordinatore` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -8697,8 +8711,8 @@ CREATE TABLE `studente` (
   `idGenitore2` int(11) NOT NULL,
   `idClasse1` int(11) NOT NULL,
   `nRegistro1` int(11) NOT NULL,
-  `idCLasse2` int(11) NOT NULL,
-  `nRegistro2` int(11) NOT NULL
+  `idCLasse2` int(11) DEFAULT NULL,
+  `nRegistro2` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -8843,6 +8857,13 @@ ALTER TABLE `azienda_tipo`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indici per le tabelle `classi`
+--
+ALTER TABLE `classi`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idCoordinatore` (`idCoordinatore`);
+
+--
 -- Indici per le tabelle `comune`
 --
 ALTER TABLE `comune`
@@ -8902,6 +8923,13 @@ ALTER TABLE `firma`
   ADD PRIMARY KEY (`annoScolastico`);
 
 --
+-- Indici per le tabelle `luogo`
+--
+ALTER TABLE `luogo`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idcomune` (`idcomune`);
+
+--
 -- Indici per le tabelle `slot`
 --
 ALTER TABLE `slot`
@@ -8928,7 +8956,11 @@ ALTER TABLE `slottipo`
 ALTER TABLE `studente`
   ADD PRIMARY KEY (`id`),
   ADD KEY `idGenitore1` (`idGenitore1`),
-  ADD KEY `idGenitore2` (`idGenitore2`);
+  ADD KEY `idGenitore2` (`idGenitore2`),
+  ADD KEY `idNascita` (`idNascita`),
+  ADD KEY `idResidenza` (`idResidenza`),
+  ADD KEY `idClasse1` (`idClasse1`),
+  ADD KEY `idCLasse2` (`idCLasse2`);
 
 --
 -- Indici per le tabelle `tirocinio`
@@ -8983,9 +9015,21 @@ ALTER TABLE `azienda_tipo`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
+-- AUTO_INCREMENT per la tabella `classi`
+--
+ALTER TABLE `classi`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT per la tabella `corso`
 --
 ALTER TABLE `corso`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT per la tabella `luogo`
+--
+ALTER TABLE `luogo`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -9047,6 +9091,12 @@ ALTER TABLE `azienda`
   ADD CONSTRAINT `azienda_ibfk_1` FOREIGN KEY (`idDocente`) REFERENCES `docente` (`id`);
 
 --
+-- Limiti per la tabella `classi`
+--
+ALTER TABLE `classi`
+  ADD CONSTRAINT `classi_ibfk_1` FOREIGN KEY (`idCoordinatore`) REFERENCES `docente` (`id`);
+
+--
 -- Limiti per la tabella `corso`
 --
 ALTER TABLE `corso`
@@ -9067,6 +9117,12 @@ ALTER TABLE `docente`
   ADD CONSTRAINT `docente_ibfk_1` FOREIGN KEY (`tipo`) REFERENCES `docente_tipo` (`idD`);
 
 --
+-- Limiti per la tabella `luogo`
+--
+ALTER TABLE `luogo`
+  ADD CONSTRAINT `luogo_ibfk_1` FOREIGN KEY (`idcomune`) REFERENCES `comune` (`idComune`);
+
+--
 -- Limiti per la tabella `slot`
 --
 ALTER TABLE `slot`
@@ -9080,7 +9136,11 @@ ALTER TABLE `slot`
 --
 ALTER TABLE `studente`
   ADD CONSTRAINT `studente_ibfk_1` FOREIGN KEY (`idGenitore1`) REFERENCES `famiglia` (`id`),
-  ADD CONSTRAINT `studente_ibfk_2` FOREIGN KEY (`idGenitore2`) REFERENCES `famiglia` (`id`);
+  ADD CONSTRAINT `studente_ibfk_2` FOREIGN KEY (`idGenitore2`) REFERENCES `famiglia` (`id`),
+  ADD CONSTRAINT `studente_ibfk_3` FOREIGN KEY (`idNascita`) REFERENCES `comune` (`idComune`),
+  ADD CONSTRAINT `studente_ibfk_4` FOREIGN KEY (`idResidenza`) REFERENCES `luogo` (`id`),
+  ADD CONSTRAINT `studente_ibfk_5` FOREIGN KEY (`idClasse1`) REFERENCES `classi` (`id`),
+  ADD CONSTRAINT `studente_ibfk_6` FOREIGN KEY (`idCLasse2`) REFERENCES `classi` (`id`);
 
 --
 -- Limiti per la tabella `tirocinio`

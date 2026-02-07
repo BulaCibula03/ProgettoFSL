@@ -25,19 +25,34 @@
 
     if($tipo==="studente"){
         $sql= "DELETE FROM studenti WHERE studente.id=:studente_id";
-        $params= [];
+        $params= [
+            ":studente_id"=> $_POST["id"] ?? null
+        ];
     }else if($tipo==="docente"){
         $sql= "DELETE FROM docenti WHERE docente.id=:docente_id";
-        $params= [];
+        $params= [
+            ":docente_id"=> $_POST["id"] ?? null
+        ];
     }else if($tipo==="corso"){
         $sql= "DELETE FROM corso WHERE corso.id=:corso_id";
-        $params= [];
+        $params= [
+            ":corso_id"=> $_POST["id"] ?? null
+        ];
     }else if($tipo==="azienda"){
         $sql= "DELETE FROM aziende WHERE azienda.id=:azienda_id";
-        $params= [];
+        $params= [
+            ":azienda_id"=> $_POST["id"] ?? null
+        ];
     }else if($tipo==="tirocinio"){
         $sql= "DELETE FROM tirocini WHERE tirocinio.id=:tirocinio_id";
-        $params= [];
+        $params= [
+            ":tirocinio_id"=> $_POST["id"] ?? null
+        ];
+    }else if($tipo==="slot"){
+        $sql= "DELETE FROM slot WHERE slot.id=:slot_id";
+        $params= [
+            ":slot_id"=> $_POST["id"] ?? null
+        ];
     }else{
         http_response_code(400);
         echo "Tipo non valido";
