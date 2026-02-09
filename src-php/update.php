@@ -24,7 +24,7 @@
     $tipo= $_POST["type"];
 
     if($tipo==="studente"){
-        $sql= "UPDATE studenti SET cognome=:cognome, nome=:nome, matricola=:matricola, cittadinanza=:cittadinanza, sesso=:sesso, data_nascita=:data_nascita, cellulareAllievo=:cellulareAllievo, cellulareEmergenza1=:cellulareEmergenza1, cellulareEmergenza2=:cellulareEmergenza2, email1=:email1, email2=:email2, idResidenza=:idResidenza, idNascita=:idNascita, idGenitore1=:idGenitore1, idGenitore2=:idGenitore2, idClasse1=:idClasse1, nRegistro1=:nRegistro1, idClasse2=:idClasse2, nRegistro2=:nRegistro2 WHERE studente.id=:studente_id";
+        $sql= "UPDATE studenti SET cognome=:cognome, nome=:nome, matricola=:matricola, cittadinanza=:cittadinanza, sesso=:sesso, data_nascita=:data_nascita, cellulareAllievo=:cellulareAllievo, cellulareEmergenza1=:cellulareEmergenza1, cellulareEmergenza2=:cellulareEmergenza2, email1=:email1, email2=:email2, idResidenza=:idResidenza, idNascita=:idNascita, idGenitore1=:idGenitore1, idGenitore2=:idGenitore2, Classe1=:Classe1, nRegistro1=:nRegistro1, Classe2=:Classe2, nRegistro2=:nRegistro2 WHERE studente.id=:studente_id";
         $params= [
             ":cognome"=> $_POST["cognome"] ?? null,
             ":nome"=> $_POST["nome"] ?? null,
@@ -41,9 +41,9 @@
             ":idNascita"=> $_POST["idNascita"] ?? null,
             ":idGenitore1"=> $_POST["idGenitore1"] ?? null,
             ":idGenitore2"=> $_POST["idGenitore2"] ?? null,
-            ":idClasse1"=> $_POST["idClasse1"] ?? null,
+            ":Classe1"=> $_POST["idClasse1"] ?? null,
             ":nRegistro1"=> $_POST["nRegistro1"] ?? null,
-            ":idClasse2"=> $_POST["idClasse2"] ?? null,
+            ":Classe2"=> $_POST["idClasse2"] ?? null,
             ":nRegistro2"=> $_POST["nRegistro2"] ?? null
         ];
     }else if($tipo==="docente"){
