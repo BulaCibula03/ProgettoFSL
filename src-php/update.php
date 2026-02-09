@@ -119,6 +119,14 @@
             ":restffp"=> $_POST["restffp"] ?? null,
             ":note"=> $_POST["note"] ?? null
         ];
+    }else if($tipo==="slot"){
+        $sql= "UPDATE slot SET data=:data, ora=:ora, id_azienda=:id_azienda WHERE slot.id=:slot_id";
+        $params= [
+            ":slot_id"=> $_POST["id"] ?? null,
+            ":data"=> $_POST["data"] ?? null,
+            ":ora"=> $_POST["ora"] ?? null,
+            ":id_azienda"=> $_POST["id_azienda"] ?? null
+        ];
     }else{
         http_response_code(400);
         echo "Tipo non valido";
