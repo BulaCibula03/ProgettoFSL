@@ -15,4 +15,17 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
+  server: {
+    port: 5173,
+    // Proxy delle richieste /api verso il backend PHP
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8080', // porta del server PHP
+        changeOrigin: true,
+        secure: false,
+        // Rimuove il prefisso /api dal path se il backend lo gestisce così
+        rewrite: (path) => path.replace(/^\/api/, '/api')
+      }
+    }
+  }
 })
