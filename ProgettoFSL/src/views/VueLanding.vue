@@ -25,7 +25,7 @@
               <div class="text-sm text-muted-foreground hidden sm:block">
                 Accesso rapido
               </div>
-              <RouterLink to='/login' class="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:opacity-90 transition-opacity">
+              <RouterLink to='/login' class="px-4 py-2 bg-primary text-primary-foreground rounded-sm text-sm font-medium hover:opacity-90 transition-opacity">
                 Accedi
               </RouterLink>
             </div>
