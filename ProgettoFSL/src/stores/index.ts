@@ -1,0 +1,7 @@
+export { useStudentiStore } from './studenti'
+export { useDocentiStore } from './docenti'
+export { useCorsiStore } from './corsi'
+export { useAziendeStore } from './aziende'
+export { useTirociniStore } from './tirocini'
+export { useSlotStore } from './slot'
+export { useAuthStore } from './auth'

@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { useAuthStore } from "@/stores"
+import { useRouter } from "vue-router"
+/* ------- Lucide Vue Next ------- */
 import {
   BadgeCheck,
   Bell,
@@ -7,12 +10,13 @@ import {
   LogOut,
   Sparkles,
 } from "lucide-vue-next"
-
+/* ------- Avatar ------- */
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
 } from '@/components/ui/avatar'
+/* ------- Dropdown ------- */
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,25 +26,21 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+/* ------- Sidebar ------- */
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar'
-
-import { useCurrentUserStore } from '@/stores/currentUserStore';
-import { ref } from "vue"
-const props = defineProps<{
-  user: {
-    name: string
-    email: string
-    avatar: string
-  }
-}>()
-
+/* ------- Code ------- */
+const router = useRouter()
+const avatar: string = "/avatars/shadcn.jpg"
 const { isMobile } = useSidebar()
-//const user = ref<any>(useCurrentUserStore().currentUser)
+async function logout(){
+  await useAuthStore().logout()
+  router.push('/')
+}
 </script>
 
 <template>
@@ -53,14 +53,14 @@ const { isMobile } = useSidebar()
             class="dark:bg-slate-900 dark:text-white data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
           >
             <Avatar class="h-8 w-8 rounded-lg">
-              <AvatarImage :src="user.avatar" :alt="user.name" />
+              <AvatarImage :src="avatar" :alt="useAuthStore().user.username" />
               <AvatarFallback class="rounded-lg">
                 CN
               </AvatarFallback>
             </Avatar>
             <div class="grid flex-1 text-left text-sm leading-tight">
-              <span class="truncate font-medium">{{ user.name }}</span>
-              <span class="truncate text-xs">{{ user.email }}</span>
+              <span class="truncate font-medium">{{ useAuthStore().user.username }}</span>
+              <span class="truncate text-xs">{{ useAuthStore().user.livello }}</span>
             </div>
             <ChevronsUpDown class="ml-auto size-4" />
           </SidebarMenuButton>
@@ -74,14 +74,14 @@ const { isMobile } = useSidebar()
           <DropdownMenuLabel class="p-0 font-normal">
             <div class="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
               <Avatar class="h-8 w-8 rounded-lg">
-                <AvatarImage :src="user.avatar" :alt="user.name" />
+                <AvatarImage :src="avatar" :alt="useAuthStore().user.username" />
                 <AvatarFallback class="rounded-lg">
                   CN
                 </AvatarFallback>
               </Avatar>
               <div class="grid flex-1 text-left text-sm leading-tight">
-                <span class="truncate font-semibold">{{ user.name }}</span>
-                <span class="truncate text-xs">{{ user.email }}</span>
+                <span class="truncate font-semibold">{{ useAuthStore().user.username }}</span>
+                <span class="truncate text-xs">{{ useAuthStore().user.livello }}</span>
               </div>
             </div>
           </DropdownMenuLabel>
@@ -92,7 +92,7 @@ const { isMobile } = useSidebar()
           <DropdownMenuSeparator />
           <DropdownMenuItem>
             <LogOut />
-            <RouterLink to='/login'>Log out</RouterLink>
+            <Button @click="logout()" >Log out</Button>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

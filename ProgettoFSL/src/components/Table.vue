@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/* ------- Table Components ------- */
 import {
   Table,
   TableBody,
@@ -9,8 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-
-import { useCurrentTableStore } from '@/stores/currentTableStore'
+/* ----- Da Fare ----- */
 </script>
 
 <template>

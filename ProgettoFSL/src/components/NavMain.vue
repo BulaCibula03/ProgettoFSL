@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import type { LucideIcon } from "lucide-vue-next"
-import { ChevronRight } from "lucide-vue-next"
+import { ChevronRight, type LucideIcon } from "lucide-vue-next"
+/* ------- Collapsible ------- */
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible'
+/* ------- Sidebar ------- */
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -17,8 +18,9 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from '@/components/ui/sidebar'
-
-import Input from "./ui/input/Input.vue";
+/* -------  Stores ------- */
+import { useStudentiStore, useDocentiStore, useTirociniStore, useAziendeStore, useSlotStore, useCorsiStore } from "@/stores";
+/* ------- Code ------- */
 defineProps<{
   items: {
     title: string
@@ -27,10 +29,35 @@ defineProps<{
     isActive?: boolean
     items?: {
       title: string
-      url: string
     }[]
   }[]
 }>()
+
+async function loadTabella(title: string){
+  switch(title){
+    case "Studenti":
+      if(useStudentiStore().studenti.length===0) await useStudentiStore().fetchStudenti()
+      break
+    case "Docenti":
+      if(useDocentiStore().docenti.length===0) await useDocentiStore().fetchDocenti()
+      break
+    case "Tirocini":
+      if(useTirociniStore().tirocini.length===0) await useTirociniStore().fetchTirocini()
+      break
+    case "Aziende":
+      if(useAziendeStore().aziende.length===0) await useAziendeStore().fetchAziende()
+      break
+    case "Slot":
+      if(useSlotStore().slot.length===0) await useSlotStore().fetchSlots()
+      break
+    case "Corsi":
+      if(useCorsiStore().corsi.length===0) await useCorsiStore().fetchCorsi()
+      break
+    default:
+      console.log("Errore")
+      break
+  }
+}
 </script>
 
 <template>
@@ -56,7 +83,7 @@ defineProps<{
               <SidebarMenuSub>
                 <SidebarMenuSubItem v-for="subItem in item.items" :key="subItem.title">
                   <SidebarMenuSubButton as-child>
-                    <a :href="subItem.url">
+                    <a @click="loadTabella(subItem.title)">
                       <span>{{ subItem.title }}</span>
                     </a>
                   </SidebarMenuSubButton>

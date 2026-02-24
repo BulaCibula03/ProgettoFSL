@@ -24,6 +24,11 @@ const router = createRouter({
       component: () => import('../views/VueLogin.vue')
     },
     {
+      path: '/documentazione',
+      name: 'Documentazione',
+      component: () => import('../views/VueDocumentation.vue')
+    },
+    {
       path: '/404',
       name: '404',
       component: () => import('../views/Vue404.vue'),

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { SidebarProps } from '@/components/ui/sidebar'
-
+import { useAuthStore } from '@/stores'
+/* ------- Lucide Vue Next ------- */
 import {
   BookOpen,
   Bot,
@@ -13,11 +13,11 @@ import {
   Settings2,
   SquareTerminal,
 } from "lucide-vue-next"
-
+/* ------- Navbar ------- */
 import NavMain from '@/components/NavMain.vue'
-import NavProjects from '@/components/NavProjects.vue'
 import NavSecondary from '@/components/NavSecondary.vue'
 import NavUser from '@/components/NavUser.vue'
+/* ------- Sidebar ------- */
 import {
   Sidebar,
   SidebarContent,
@@ -26,18 +26,14 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  type SidebarProps,
 } from '@/components/ui/sidebar'
-
+/* ------- Code ------- */
 const props = withDefaults(defineProps<SidebarProps>(), {
   variant: "inset",
 })
 
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   navMain: [
     {
       title: "Tabelle",
@@ -45,38 +41,36 @@ const data = {
       icon: PieChart,
       isActive: true,
       items: [{
-        title: "Prova",
-        url: "#",
-      }],
+          title: "Studenti",
+        },
+        {
+          title: "Docenti"
+        },
+        {
+          title: "Tirocini"
+        },
+        {
+          title: "Aziende"
+        },
+        {
+          title: "Slot"
+        },
+        {
+          title: "Corsi"
+        },
+      ],
     },
   ],
   navSecondary: [
     {
       title: "Documentazione",
-      url: "#",
-      icon: BookOpen,
+      url: "/documentazione",
+      icon: LifeBuoy,
     },
     {
       title: "Feedback",
       url: "#",
       icon: Send,
-    },
-  ],
-  projects: [
-    {
-      name: "Design Engineering",
-      url: "#",
-      icon: Frame,
-    },
-    {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: Map,
     },
   ],
 }
@@ -107,7 +101,7 @@ const data = {
       <NavSecondary :items="data.navSecondary" class="mt-auto" />
     </SidebarContent>
     <SidebarFooter class="bg-slate-950">
-      <NavUser :user="data.user" />
+      <NavUser />
     </SidebarFooter>
   </Sidebar>
 </template>

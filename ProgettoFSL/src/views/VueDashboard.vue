@@ -5,23 +5,23 @@ export const iframeHeight = "800px"
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue"
-import AppSidebar from "@/components/AppSidebar.vue"
+/* ------- Components ------- */
 import EmptyTable from "@/components/EmptyTable.vue"
 import Table from "@/components/Table.vue"
 import { Input } from "@/components/ui/input"
-import { useTablesStore } from '@/stores/tablesStore'
 import { Separator } from "@/components/ui/separator"
+/* ------- Sidebar ------- */
+import AppSidebar from "@/components/AppSidebar.vue"
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
-
+/* ------- Code ------- */
 onMounted(() => {
-  useTablesStore().getTables()
+  //da fare
 })
 const loading = ref(false)
-const tables = ref<any | undefined>(useTablesStore().tables)
 </script>
 
 <template>

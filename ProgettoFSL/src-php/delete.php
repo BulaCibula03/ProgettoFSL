@@ -1,63 +1,67 @@
 <?php
     include "_noncachare.php";
     include "_db.php";
+    include "_access.php";
     header("Content-Type: application/json; charset=utf-8");
+
+    if($_SERVER['REQUEST_METHOD']==='OPTIONS'){
+        http_response_code(200);
+        exit;
+    }
     try{
         $pdo=new PDO(
             "mysql:host=$host;dbname=$db;charset=utf8",
             $user,
             $pw,
-            [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
+            [PDO::ATTR_ERRMODE=> PDO::ERRMODE_EXCEPTION, PDO::ATTR_DEFAULT_FETCH_MODE=> PDO::FETCH_ASSOC]
         );
-    }catch(PDOException $e){
+    }catch (PDOException $e){
         http_response_code(500);
-        echo json_encode(["error"=>"Errore DB"]);
+        echo json_encode(["success" => false, "error" => "Errore DB"]);
         exit;
     }
 
-    $dato= $_POST["data"] ?? null;
-    if(!isset($_POST["data"])){
+    $raw=file_get_contents("php://input");
+    $data=json_decode($raw, true);
+    if(!$data){
         http_response_code(400);
-        echo "Dato mancante";
+        echo json_encode(["success"=>false, "error"=>"JSON non valido"]);
         exit;
     }
-    $tipo= $_POST["type"];
+    $tipo=$data["type"] ?? null;
+    $id=$data["id"] ?? null;
+    if(!$tipo||!$id){
+        http_response_code(400);
+        echo json_encode(["success"=>false, "error"=>"Type o ID mancante"]);
+        exit;
+    }
 
-    if($tipo==="studente"){
-        $sql= "DELETE FROM studenti WHERE studente.id=:studente_id";
-        $params= [
-            ":studente_id"=> $_POST["id"] ?? null
-        ];
-    }else if($tipo==="docente"){
-        $sql= "DELETE FROM docenti WHERE docente.id=:docente_id";
-        $params= [
-            ":docente_id"=> $_POST["id"] ?? null
-        ];
-    }else if($tipo==="corso"){
-        $sql= "DELETE FROM corso WHERE corso.id=:corso_id";
-        $params= [
-            ":corso_id"=> $_POST["id"] ?? null
-        ];
-    }else if($tipo==="azienda"){
-        $sql= "DELETE FROM aziende WHERE azienda.id=:azienda_id";
-        $params= [
-            ":azienda_id"=> $_POST["id"] ?? null
-        ];
-    }else if($tipo==="tirocinio"){
-        $sql= "DELETE FROM tirocini WHERE tirocinio.id=:tirocinio_id";
-        $params= [
-            ":tirocinio_id"=> $_POST["id"] ?? null
-        ];
-    }else if($tipo==="slot"){
-        $sql= "DELETE FROM slot WHERE slot.id=:slot_id";
-        $params= [
-            ":slot_id"=> $_POST["id"] ?? null
-        ];
-    }else{
-        http_response_code(400);
-        echo "Tipo non valido";
-        exit;
+    switch ($tipo) {
+        case "studente":
+            $sql="DELETE FROM studenti WHERE id=:id";
+            break;
+        case "docente":
+            $sql="DELETE FROM docenti WHERE id=:id";
+            break;
+        case "corso":
+            $sql="DELETE FROM corso WHERE id=:id";
+            break;
+        case "azienda":
+            $sql="DELETE FROM aziende WHERE id=:id";
+            break;
+        case "tirocinio":
+            $sql="DELETE FROM tirocini WHERE id=:id";
+            break;
+        case "slot":
+            $sql="DELETE FROM slot WHERE id=:id";
+            break;
+        default:
+            http_response_code(400);
+            echo json_encode(["success" => false, "error" => "Tipo non valido"]);
+            exit;
     }
+    $params=[":id" => $id];
+    
     try{
         $stmt= $pdo->prepare($sql);
         $stmt->execute($params);

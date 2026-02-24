@@ -1,13 +1,21 @@
 <script setup lang="ts">
-  import {
-    Building2,
-    Users,
-    GraduationCap,
-    ClipboardList,
-    ArrowRight,
-    BarChart3,
-    BookOpen,
-  } from 'lucide-vue-next'
+/* ------- Stores ------- */
+import {
+  useStudentiStore, 
+  useAziendeStore, 
+  useDocentiStore, 
+  useTirociniStore 
+} from '@/stores/index';
+/* ------- Lucide-Vue-Next ------- */
+import {
+  Building2,
+  Users,
+  GraduationCap,
+  ClipboardList,
+  ArrowRight,
+  BarChart3,
+  BookOpen,
+} from 'lucide-vue-next'
 </script>
 
 <template>
@@ -15,9 +23,9 @@
       <header class="border-b border-border bg-card sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="flex items-center justify-between h-16">
-            <div class="flex items-center gap-3">
+            <div class="flex items-left">
               <div>
-                <h1 class="text-lg font-semibold text-foreground">Sistema Gestione PCTO</h1>
+                <h1 class="text-lg font-semibold text-foreground">Sistema Gestione FSL</h1>
                 <p class="text-xs text-muted-foreground">Percorsi Competenze Trasversali</p>
               </div>
             </div>
@@ -25,7 +33,7 @@
               <div class="text-sm text-muted-foreground hidden sm:block">
                 Accesso rapido
               </div>
-              <RouterLink to='/login' class="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:opacity-90 transition-opacity">
+              <RouterLink to='/login' class="px-4 py-2 bg-primary text-primary-foreground rounded-sm text-sm font-medium hover:opacity-90 transition-opacity">
                 Accedi
               </RouterLink>
             </div>
@@ -41,10 +49,10 @@
                 Piattaforma Intranet
               </div>
               <h2 class="text-4xl md:text-5xl font-bold text-foreground mb-4 leading-tight">
-                Gestione Integrata dei PCTO
+                Gestione Integrata FSL
               </h2>
               <p class="text-lg text-muted-foreground leading-relaxed">
-                Coordina in modo semplice ed efficiente gli studenti tirocinanti, le aziende partner, i docenti tutor e tutte le attività formative del percorso PCTO dell'istituto
+                Coordina in modo semplice ed efficiente gli studenti tirocinanti, le aziende partner, i docenti tutor e tutte le attività formative del percorso FSL dell'istituto
               </p>
             </div>
   
@@ -71,7 +79,7 @@
               </div>
   
               <div class="group bg-card border border-border rounded-lg p-6 hover:border-primary/30 hover:shadow-lg transition-all duration-300">
-                <h3 class="text-lg font-semibold text-card-foreground mb-2">Attività PCTO</h3>
+                <h3 class="text-lg font-semibold text-card-foreground mb-2">Attività FSL</h3>
                 <p class="text-sm text-muted-foreground">
                   Pianificazione, monitoraggio, rendicontazione e valutazione delle attività
                 </p>
@@ -84,22 +92,22 @@
               </div>
               <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div class="p-4 bg-background rounded-lg border border-border/50">
-                  <div class="text-4xl font-bold text-primary mb-2">342</div>
+                  <div class="text-4xl font-bold text-primary mb-2">{{ useStudentiStore().studenti }}</div>
                   <div class="text-sm text-muted-foreground font-medium">Studenti Attivi</div>
-                  <div class="text-xs text-muted-foreground/70 mt-1">In percorsi PCTO</div>
+                  <div class="text-xs text-muted-foreground/70 mt-1">In percorsi FSL</div>
                 </div>
                 <div class="p-4 bg-background rounded-lg border border-border/50">
-                  <div class="text-4xl font-bold text-primary mb-2">87</div>
+                  <div class="text-4xl font-bold text-primary mb-2">{{ useAziendeStore().aziende }}</div>
                   <div class="text-sm text-muted-foreground font-medium">Aziende Convenzionate</div>
                   <div class="text-xs text-muted-foreground/70 mt-1">Partner attivi</div>
                 </div>
                 <div class="p-4 bg-background rounded-lg border border-border/50">
-                  <div class="text-4xl font-bold text-primary mb-2">24</div>
+                  <div class="text-4xl font-bold text-primary mb-2">{{ useDocentiStore().docenti }}</div>
                   <div class="text-sm text-muted-foreground font-medium">Docenti Tutor</div>
                   <div class="text-xs text-muted-foreground/70 mt-1">In servizio</div>
                 </div>
                 <div class="p-4 bg-background rounded-lg border border-border/50">
-                  <div class="text-4xl font-bold text-primary mb-2">156</div>
+                  <div class="text-4xl font-bold text-primary mb-2">{{ useTirociniStore().tirocini }}</div>
                   <div class="text-sm text-muted-foreground font-medium">Tirocini in Corso</div>
                   <div class="text-xs text-muted-foreground/70 mt-1">Ore svolte</div>
                 </div>
@@ -168,7 +176,7 @@
             <div class="bg-gradient-to-r from-primary to-primary/80 rounded-lg p-12 text-center text-primary-foreground">
               <h3 class="text-3xl font-semibold mb-4">Accedi Ora</h3>
               <p class="mb-6 max-w-2xl mx-auto text-primary-foreground/90">
-                Gestisci tutte le attività PCTO dell'istituto in modo centralizzato, trasparente e efficiente
+                Gestisci tutte le attività di FSL dell'istituto in modo centralizzato, trasparente e efficiente
               </p>
               <RouterLink to='/login' class="px-8 py-3 bg-primary-foreground text-primary rounded-lg font-semibold hover:opacity-90 transition-opacity inline-flex items-center gap-2">
                 Accedi al Sistema
@@ -183,8 +191,8 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div class="flex flex-col sm:flex-row items-center justify-between text-sm text-muted-foreground">
             <div>
-              <p>&copy; 2024 Sistema Gestione PCTO</p>
-              <p class="text-xs text-muted-foreground/70">Piattaforma interna per percorsi competenze trasversali e orientamento</p>
+              <p>&copy; 2024 Sistema Gestione FSL</p>
+              <p class="text-xs text-muted-foreground/70">Piattaforma interna per formazione scuola-lavoro</p>
             </div>
             <div class="mt-4 sm:mt-0">
               <p class="text-xs">Versione 1.0</p>

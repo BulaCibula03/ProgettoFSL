@@ -1,7 +1,13 @@
 <?php
     include "_noncachare.php";
     include "_db.php";
+    include "_access.php";
     header("Content-Type: application/json; charset=utf-8");
+
+    if($_SERVER['REQUEST_METHOD'] === 'OPTIONS'){
+        http_response_code(200);
+        exit;
+    }
     try{
         $pdo=new PDO(
             "mysql:host=$host;dbname=$db;charset=utf8",
@@ -15,46 +21,52 @@
         exit;
     }
 
-    $dato= $_POST["data"] ?? null;
-    if(!isset($_POST["data"])){
+    $raw=file_get_contents("php://input");
+    $data=json_decode($raw, true);
+    if(!$data){
         http_response_code(400);
-        echo "Dato mancante";
+        echo json_encode(["success"=>false, "error"=>"JSON non valido"]);
         exit;
     }
-    $tipo= $_POST["type"];
+    $tipo=$data["type"] ?? null;
+    if(!$tipo){
+        http_response_code(400);
+        echo json_encode(["success"=>false, "error"=>"Tipo mancante"]);
+        exit;
+    }
 
     if($tipo==="studente"){
         $sql= "select * from studenti";
-        $params= [];
     }else if($tipo==="docente"){
         $sql= "select * from docenti";
-        $params= [];
     }else if($tipo==="corso"){
         $sql= "select * from corso";
-        $params= [];
     }else if($tipo==="azienda"){
         $sql= "select * from aziende";
-        $params= [];
     }else if($tipo==="tirocinio"){
         $sql= "select * from tirocini";
-        $params= [];
+    }else if($tipo==="slot"){
+        $sql= "select * from slot";
     }else{
         http_response_code(400);
-        echo "Tipo non valido";
+        echo json_encode(["success"=>false, "error"=>"Tipo non valido"]);
         exit;
     }
-    try{
-        $stmt= $pdo->prepare($sql);
-        $stmt->execute($params);
+    $params= [];
+    try {
+        $stmt=$pdo->prepare($sql);
+        $stmt->execute();
+        $rows=$stmt->fetchAll();
         echo json_encode([
-            "success"=> true,
-            "id"=> $pdo->lastInsertId()
+            "success"=>true,
+            "data"=>$rows,
+            "count"=>count($rows)
         ]);
-    }catch(PDOException $e){
+    } catch (PDOException $e) {
         http_response_code(500);
         echo json_encode([
-            "success"=> false,
-            "error"=> $e->getMessage()
+            "success"=>false,
+            "error"=>$e->getMessage()
         ]);
     }
 ?>

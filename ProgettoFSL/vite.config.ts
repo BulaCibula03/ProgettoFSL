@@ -18,15 +18,13 @@ export default defineConfig({
     },
   },
   server: {
-    port: 5173,
-    // Proxy delle richieste /api verso il backend PHP
+    port: 5100,
     proxy: {
       '/api': {
-        target: 'http://localhost:8080', // porta del server PHP
+        target: 'http://localhost:5100/',
         changeOrigin: true,
         secure: false,
-        // Rimuove il prefisso /api dal path se il backend lo gestisce così
-        rewrite: (path) => path.replace(/^\/api/, '/api')
+        rewrite: (path) => path.replace(/^\/api/, ''),
       }
     }
   }

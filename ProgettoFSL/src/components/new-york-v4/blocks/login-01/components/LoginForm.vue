@@ -1,7 +1,10 @@
 <script setup lang="ts">
-import type { HTMLAttributes } from "vue"
-import { cn } from '@/lib/utils'
+import { type HTMLAttributes, ref } from "vue"
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { useRouter } from "vue-router"
+import { useAuthStore, type LoginCredentials } from "@/stores/auth"
+/* ------- Card ------- */
 import {
   Card,
   CardContent,
@@ -9,17 +12,24 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+/* ------- Field ------- */
 import {
   Field,
   FieldDescription,
   FieldGroup,
   FieldLabel,
 } from '@/components/ui/field'
-import { Input } from '@/components/ui/input'
-
+/* ------- Code ------- */
 const props = defineProps<{
   class?: HTMLAttributes["class"]
 }>()
+
+const router = useRouter()
+const user = ref<LoginCredentials>({ username: "", password: "" })
+async function submit(){
+  await useAuthStore().login(user.value)
+  if(useAuthStore().isLoggedIn) router.push('/dashboard')
+}
 </script>
 
 <template>
@@ -32,7 +42,7 @@ const props = defineProps<{
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form>
+        <form @submit='submit()'>
           <FieldGroup>
             <Field>
               <FieldLabel for="email">
@@ -43,6 +53,7 @@ const props = defineProps<{
                 type="text"
                 placeholder="mariorossi"
                 required
+                v-model="user.username"
               />
             </Field>
             <Field>
@@ -57,7 +68,7 @@ const props = defineProps<{
                   Hai dimenticato la password?
                 </a>
               </div>
-              <Input id="password" type="password" required />
+              <Input v-model="user.password" id="password" type="password" required />
             </Field>
             <Field>
               <Button type="submit">

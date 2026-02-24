@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { LucideIcon } from "lucide-vue-next"
-
+/* ------- Sidebar ------- */
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -8,7 +8,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
-
+/* ------- Code ------- */
 const props = defineProps<{
   items: {
     title: string

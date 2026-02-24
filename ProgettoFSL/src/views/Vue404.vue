@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { SearchIcon } from 'lucide-vue-next'
+/* ------- Components ------- */
 import {
   Empty,
   EmptyContent,

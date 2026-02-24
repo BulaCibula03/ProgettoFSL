@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Cloud } from 'lucide-vue-next'
-import { Button } from '@/components/ui/button'
+/* ------- Components ------- */
 import {
   Empty,
   EmptyContent,
@@ -17,7 +17,6 @@ import {
       <EmptyMedia variant="icon">
         <Cloud />
       </EmptyMedia>
-      <EmptyTitle>Lista Tabelle Vuota</EmptyTitle>
       <EmptyDescription>
         Aggiungi delle tabelle al database
       </EmptyDescription>
