@@ -25,7 +25,7 @@ export const useCorsiStore = defineStore('corsi', () => {
     loading.value = true
     error.value = null
     try {
-      const response = await fetch('/api/read.php', {
+      const response = await fetch('/src-php/read.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
