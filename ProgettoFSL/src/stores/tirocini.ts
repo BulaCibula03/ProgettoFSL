@@ -39,7 +39,7 @@ export const useTirociniStore = defineStore('tirocini', () => {
     loading.value = true
     error.value = null
     try {
-      const response = await fetch('/api/delete.php', {
+      const response = await fetch('/src-php/delete.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -88,37 +88,39 @@
             ":enteEsterno"=> $data["enteEsterno"] ?? null
         ];
     }else if($tipo==="azienda"){
-        $sql= "INSERT INTO aziende (nome,natura,comune_sl,indirizzo_sl,comune,indirizzo,cod_fiscale,part_iva,tel,mail,sito,leg_rapp_nome,leg_rapp_nato_a,leg_rapp_dt,leg_rapp_cf,leg_tel,leg_note,note,ateco,check,nproto,dproto,firma,attiva,prncct,idDocente,sportiva,inglese) VALUES (:id,:nome,:natura,:comune_sl,:indirizzo_sl,:comune,:indirizzo,:cod_fiscale,:part_iva,:tel,:mail,:sito,:leg_rapp_nome,:leg_rapp_nato_a,:leg_rapp_dt,:leg_rapp_cf,:leg_tel,:leg_note,:note,:ateco,:check,:nproto,:dproto,:firma,:attiva,:prncct,:idDocente,:sportiva,:inglese)";
-        $params= [
-            ":nome"=> $data["nome"] ?? null,
-            ":natura"=> $data["natura"] ?? null,
-            ":comune_sl"=> $data["comune_sl"] ?? null,
-            ":indirizzo_sl"=> $data["indirizzo_sl"] ?? null,
-            ":comune"=> $data["comune"] ?? null,
-            ":indirizzo"=> $data["indirizzo"] ?? null,
-            ":cod_fiscale"=> $data["cod_fiscale"] ?? null,
-            ":part_iva"=> $data["part_iva"] ?? null,
-            ":tel"=> $data["tel"] ?? null,
-            ":mail"=> $data["mail"] ?? null,
-            ":sito"=> $data["sito"] ?? null,
-            ":leg_rapp_nome"=> $data["leg_rapp_nome"] ?? null,
-            ":leg_rapp_nato_a"=> $data["leg_rapp_nato_a"] ?? null,
-            ":leg_rapp_dt"=> $data["leg_rapp_dt"] ?? null,
-            ":leg_rapp_cf"=> $data["leg_rapp_cf"] ?? null,
-            ":leg_tel"=> $data["leg_tel"] ?? null,
-            ":leg_note"=> $data["leg_note"] ?? null,
-            ":note"=> $data["note"] ?? null,
-            ":ateco"=> $data["ateco"] ?? null,
-            ":check"=>$data['check']??null,
-            ":valutazione"=> $data["valutazione"] ?? null,
-            ":invioMail"=> $data["invioMail"] ?? null,
-            ":restpfi"=> $data["restpfi"] ?? null,
-            ":restsva"=> $data["restsva"] ?? null,
-            ":restsvs"=> $data["restsvs"] ?? null,
-            ":restffp"=> $data["restffp"] ?? null,
-            ":note"=> $data["note"] ?? null
+        $sql= "INSERT INTO aziende (nome, natura, comune_sl, indirizzo_sl, comune, indirizzo,cod_fiscale, part_iva, tel, mail, sito,leg_rapp_nome, leg_rapp_nato_a, leg_rapp_dt, leg_rapp_cf,leg_tel, leg_note, note, ateco, `check`,nproto, dproto, firma, attiva, prncct,idDocente, sportiva, inglese) VALUES (:nome, :natura, :comune_sl, :indirizzo_sl, :comune, :indirizzo,:cod_fiscale, :part_iva, :tel, :mail, :sito,:leg_rapp_nome, :leg_rapp_nato_a, :leg_rapp_dt, :leg_rapp_cf,:leg_tel, :leg_note, :note, :ateco, :check,:nproto, :dproto, :firma, :attiva, :prncct,:idDocente, :sportiva, :inglese)";
+        $params = [
+            ":nome" => $data["nome"] ?? null,
+            ":natura" => $data["natura"] ?? null,
+            ":comune_sl" => $data["comune_sl"] ?? null,
+            ":indirizzo_sl" => $data["indirizzo_sl"] ?? null,
+            ":comune" => $data["comune"] ?? null,
+            ":indirizzo" => $data["indirizzo"] ?? null,
+            ":cod_fiscale" => $data["cod_fiscale"] ?? null,
+            ":part_iva" => $data["part_iva"] ?? null,
+            ":tel" => $data["tel"] ?? null,
+            ":mail" => $data["mail"] ?? null,
+            ":sito" => $data["sito"] ?? null,
+            ":leg_rapp_nome" => $data["leg_rapp_nome"] ?? null,
+            ":leg_rapp_nato_a" => $data["leg_rapp_nato_a"] ?? null,
+            ":leg_rapp_dt" => $data["leg_rapp_dt"] ?? null,
+            ":leg_rapp_cf" => $data["leg_rapp_cf"] ?? null,
+            ":leg_tel" => $data["leg_tel"] ?? null,
+            ":leg_note" => $data["leg_note"] ?? null,
+            ":note" => $data["note"] ?? null,
+            ":ateco" => $data["ateco"] ?? null,
+            ":check" => $data["check"] ?? 0,
+            ":nproto" => $data["nproto"] ?? null,
+            ":dproto" => $data["dproto"] ?? null,
+            ":firma" => $data["firma"] ?? 0,
+            ":attiva" => $data["attiva"] ?? 1,
+            ":prncct" => $data["prncct"] ?? 0,
+            ":idDocente" => $data["idDocente"] ?? null,
+            ":sportiva" => $data["sportiva"] ?? 0,
+            ":inglese" => $data["inglese"] ?? 0
         ];
-    }else if($tipo==="slot"){
+    }
+else if($tipo==="slot"){
         $sql= "INSERT INTO slot (idS,idAzienda,annoScolastico,datai,dataf,oreprev,idtirocinio,tipo,impiego,schi,sinf,smec,slst,note,attivita,idCreatore) VALUES (:idS,:idAzienda,:annoScolastico,:datai,:dataf,:oreprev,:idtirocinio,:tipo,:impiego,:schi,:sinf,:smec,:slst,:note,:attivita,:idCreatore)";
         $params= [
             ":idAzienda"=> $data["idAzienda"] ?? null,
@@ -139,7 +141,10 @@
         ];
     }else{
         http_response_code(400);
-        echo "Tipo non valido";
+        echo json_encode([
+            "success"=> false,
+            "error"=> "Tipo non valido"
+        ]);
         exit;
     }
     
