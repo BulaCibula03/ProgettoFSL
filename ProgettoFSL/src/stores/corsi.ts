@@ -25,7 +25,7 @@ export const useCorsiStore = defineStore('corsi', () => {
     loading.value = true
     error.value = null
     try {
-      const response = await fetch('/src-php/read.php', {
+      const response = await fetch('/api/read.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ export const useCorsiStore = defineStore('corsi', () => {
     loading.value = true
     error.value = null
     try {
-      const response = await fetch('/src-php/create.php', {
+      const response = await fetch('/api/create.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -79,7 +79,7 @@ export const useCorsiStore = defineStore('corsi', () => {
     loading.value = true
     error.value = null
     try {
-      const response = await fetch('/src-php/delete.php', {
+      const response = await fetch('/api/delete.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
