@@ -119,8 +119,7 @@
             ":sportiva" => $data["sportiva"] ?? 0,
             ":inglese" => $data["inglese"] ?? 0
         ];
-    }
-else if($tipo==="slot"){
+    }else if($tipo==="slot"){
         $sql= "INSERT INTO slot (idS,idAzienda,annoScolastico,datai,dataf,oreprev,idtirocinio,tipo,impiego,schi,sinf,smec,slst,note,attivita,idCreatore) VALUES (:idS,:idAzienda,:annoScolastico,:datai,:dataf,:oreprev,:idtirocinio,:tipo,:impiego,:schi,:sinf,:smec,:slst,:note,:attivita,:idCreatore)";
         $params= [
             ":idAzienda"=> $data["idAzienda"] ?? null,
