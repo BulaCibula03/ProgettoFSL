@@ -77,7 +77,7 @@ const data = {
 </script>
 
 <template>
-  <Sidebar v-bind="props" class="dark">
+  <Sidebar v-bind="props" class="dark p-0">
     <SidebarHeader class="bg-slate-950">
       <SidebarMenu>
         <SidebarMenuItem class="dark">

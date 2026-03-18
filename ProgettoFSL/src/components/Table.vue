@@ -11,10 +11,12 @@ import {
   TableRow,
 } from '@/components/ui/table'
 /* ----- Da Fare ----- */
+import { useCorsiStore } from '@/stores/index'
+import { onMounted } from 'vue';
 </script>
 
 <template>
-  <Table>
+  <Table class="text-gray-400 min-h-screen rounded-lg border-1 border-gray overscroll-none">
     <TableHeader>
       <TableRow>
         <TableHead class="w-[100px]"> <!--to define later: da mettere un v-for-->
@@ -22,7 +24,7 @@ import {
       </TableRow>
     </TableHeader>
     <TableBody>
-      <TableRow v-for="row in useCurrentTableStore().currentTable" :key="row.id">
+      <TableRow v-for="row in useCorsiStore().corsi" :key="row.id">
         <TableCell v-for="data in row" class="font-medium">
           {{ data }}
         </TableCell>
@@ -34,7 +36,7 @@ import {
           Righe Totali
         </TableCell>
         <TableCell class="text-right text-white">
-          {{ useCurrentTableStore().currentTable.length }}
+          {{ useCorsiStore().corsi.length }}
         </TableCell>
       </TableRow>
     </TableFooter>

@@ -26,9 +26,9 @@ const loading = ref(false)
 
 <template>
   <SidebarProvider class="dark">
-    <AppSidebar />
+    <AppSidebar class="h-screen"/>
     <SidebarInset>
-      <header class="flex h-16 shrink-0 items-center gap-2 pr-5">
+      <header class="flex h-16 shrink-0 items-center gap-2 pr-5 fixed">
         <div class="flex items-center gap-2 p-4">
           <SidebarTrigger class="-ml-1 text-white" />
           <Separator
@@ -38,18 +38,7 @@ const loading = ref(false)
         </div>
         <Input placeholder="Cerca" class="text-white"/>
       </header>
-      <div v-if="loading" class="animate-pulse flex flex-1 flex-col gap-4 p-4 pt-0">
-        <div class="grid auto-rows-min gap-4 md:grid-cols-3">
-          <div class="bg-muted/50 aspect-video rounded-xl" />
-          <div class="bg-muted/50 aspect-video rounded-xl" />
-          <div class="bg-muted/50 aspect-video rounded-xl" />
-        </div>
-        <div class="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min" />
-      </div>
-      <div v-else-if="tables===undefined" class="flex grow">
-        <EmptyTable />
-      </div>
-      <div v-else>
+      <div class="pt-18 overscroll-contain">
         <Table />
       </div>
     </SidebarInset>
