@@ -3,14 +3,14 @@ import { ref } from 'vue';
 
 export interface Corso {
   id?: number
-  idTipo: number
-  idModo: number
+  idtipo: number
+  idmodo: number
   annoScolastico: string
   descrizione: string
   data_inizio: string
   data_fine: string
   ore: number
-  docente: number
+  docente: string
   esterno: number
   note: string
   enteEsterno: string
