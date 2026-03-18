@@ -9,15 +9,18 @@ import {
     useTirociniStore 
 } from '@/stores/index';
 /* ------- Code ------- */
+import { useCorsiStore } from '@/stores/index';
 const router = useRouter()
-
 onMounted(async ()=>{
-    router.push('/dashboard')
+    //router.push('/dashboard')
+    await useCorsiStore().fetchCorsi()
 })
 </script>
 
 <template>
-    <div class="bg-slate-900 h-screen w-screen overflow-auto">
+    <!--<div class="bg-slate-900 h-screen w-screen overflow-auto">
         <RouterView />
-    </div>
+    </div>-->
+    <!--To modify later-->
+    <div>{{ useCorsiStore().corsi }}</div>
 </template>
