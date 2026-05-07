@@ -25,7 +25,7 @@
             echo json_encode(["ok"=>false,"message"=>"Username e password richiesti"]);
             exit;
         }
-        $stmt= $db->prepare("SELECT id, username, livello, password FROM utenti WHERE username=?");
+        $stmt= $db->prepare("SELECT id, username, livello, password FROM utenti WHERE username=:username");
         $stmt->bind_param("s",$username);
         $stmt->execute();
         $result= $stmt->get_result();
