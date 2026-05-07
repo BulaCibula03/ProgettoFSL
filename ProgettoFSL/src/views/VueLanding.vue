@@ -4,7 +4,8 @@ import {
   useStudentiStore, 
   useAziendeStore, 
   useDocentiStore, 
-  useTirociniStore 
+  useTirociniStore,
+  useAuthStore
 } from '@/stores/index';
 /* ------- Lucide-Vue-Next ------- */
 import {
@@ -16,6 +17,11 @@ import {
   BarChart3,
   BookOpen,
 } from 'lucide-vue-next'
+import { onMounted } from 'vue';
+
+onMounted(() =>{
+  useAuthStore().logout()
+})
 </script>
 
 <template>
@@ -26,7 +32,7 @@ import {
             <div class="flex items-left">
               <div>
                 <h1 class="text-lg font-semibold text-foreground">Sistema Gestione FSL</h1>
-                <p class="text-xs text-muted-foreground">Percorsi Competenze Trasversali</p>
+                <p class="text-xs text-muted-foreground">Formazione Scuola-Lavoro</p>
               </div>
             </div>
             <div class="flex items-center gap-4">
@@ -191,7 +197,7 @@ import {
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div class="flex flex-col sm:flex-row items-center justify-between text-sm text-muted-foreground">
             <div>
-              <p>&copy; 2024 Sistema Gestione FSL</p>
+              <p>&copy; 2026 Sistema Gestione FSL</p>
               <p class="text-xs text-muted-foreground/70">Piattaforma interna per formazione scuola-lavoro</p>
             </div>
             <div class="mt-4 sm:mt-0">

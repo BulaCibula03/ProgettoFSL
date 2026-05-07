@@ -2,11 +2,13 @@
 import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 /* ------- Stores ------- */
-import { useStudentiStore } from '@/stores/index';
+import { useAuthStore, useCorsiStore, useCurrentTableStore } from '@/stores/index';
 /* ------- Code ------- */
 const router = useRouter()
 onMounted(async ()=>{
-    useStudentiStore().fetchStudenti()
+    useCorsiStore().fetchCorsi()
+    useCurrentTableStore().setCurrentTable("Corsi")
+    useAuthStore().logout()
     router.push('/dashboard')
 })
 </script>

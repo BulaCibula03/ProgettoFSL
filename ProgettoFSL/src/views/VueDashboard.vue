@@ -28,17 +28,17 @@ const loading = ref(false)
   <SidebarProvider class="dark">
     <AppSidebar class="h-screen"/>
     <SidebarInset>
-      <header class="flex h-16 shrink-0 items-center gap-2 pr-5 fixed">
-        <div class="flex items-center gap-2 p-4">
+      <header class="fixed flex h-16 bg-slate-950 shrink-0 items-center gap-2 z-20">
+        <div class="flex items-center gap-2 p-4 z-10">
           <SidebarTrigger class="-ml-1 text-white" />
           <Separator
             orientation="vertical"
             class="bg-white mr-2 data-[orientation=vertical]:h-4"
           />
         </div>
-        <Input placeholder="Cerca" class="text-white"/>
+        <Input placeholder="Cerca" class="text-white grow"/>
       </header>
-      <div class="pt-18 overscroll-contain">
+      <div class="overscroll-contain pt-18">
         <Table />
       </div>
     </SidebarInset>
