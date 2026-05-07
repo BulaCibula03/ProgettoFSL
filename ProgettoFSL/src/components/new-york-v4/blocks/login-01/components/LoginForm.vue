@@ -42,7 +42,7 @@ async function submit(){
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form @submit='submit()'>
+        <form @submit.prevent='submit()'>
           <FieldGroup>
             <Field>
               <FieldLabel for="email">

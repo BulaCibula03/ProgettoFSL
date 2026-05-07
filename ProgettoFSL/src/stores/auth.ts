@@ -20,7 +20,7 @@ export interface NewUser {
 }
 
 export const useAuthStore = defineStore('auth', () => {
-  const user = ref<User>({ username: "test", livello: "test "})
+  const user = ref<User>({ username: "", livello: ""})
   const loading = ref(false)
   const error = ref<string | null>(null)
   const isLoggedIn = ref(false)
@@ -47,7 +47,7 @@ export const useAuthStore = defineStore('auth', () => {
           username: result.username,
           livello: result.livello,
         }
-        isLoggedIn.value = true
+        if(user.value.username !== "") isLoggedIn.value = true
         return true
       } else {
         error.value = result.message
@@ -70,7 +70,7 @@ export const useAuthStore = defineStore('auth', () => {
       })
       const result = await response.json()
       if (result.ok) {
-        user.value = { username: "test", livello: "test" }
+        user.value = { username: "", livello: "" }
         isLoggedIn.value = false
         return true
       } else {
@@ -101,7 +101,7 @@ export const useAuthStore = defineStore('auth', () => {
         isLoggedIn.value = true
         return true
       } else {
-        user.value = { username: "test", livello: "test" }
+        user.value = { username: "", livello: "" }
         isLoggedIn.value = false
         return false
       }
