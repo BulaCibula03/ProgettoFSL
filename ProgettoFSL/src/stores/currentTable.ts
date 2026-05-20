@@ -4,7 +4,7 @@ import { useCorsiStore, useAziendeStore, useDocentiStore, useSlotStore, useTiroc
 
 export const useCurrentTableStore = defineStore("currentTable", () => {
   const currentTable = ref<any>(useCorsiStore().corsi)
-  function setCurrentTable(table: string){
+  async function setCurrentTable(table: string){
     switch(table){
       case "Corsi": 
         currentTable.value = [...useCorsiStore().corsi]

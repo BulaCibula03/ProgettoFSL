@@ -98,22 +98,22 @@ onMounted(() =>{
               </div>
               <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div class="p-4 bg-background rounded-lg border border-border/50">
-                  <div class="text-4xl font-bold text-primary mb-2">{{ useStudentiStore().studenti }}</div>
+                  <div class="text-4xl font-bold text-primary mb-2">{{ useStudentiStore().studenti.length }}</div>
                   <div class="text-sm text-muted-foreground font-medium">Studenti Attivi</div>
                   <div class="text-xs text-muted-foreground/70 mt-1">In percorsi FSL</div>
                 </div>
                 <div class="p-4 bg-background rounded-lg border border-border/50">
-                  <div class="text-4xl font-bold text-primary mb-2">{{ useAziendeStore().aziende }}</div>
+                  <div class="text-4xl font-bold text-primary mb-2">{{ useAziendeStore().aziende.length }}</div>
                   <div class="text-sm text-muted-foreground font-medium">Aziende Convenzionate</div>
                   <div class="text-xs text-muted-foreground/70 mt-1">Partner attivi</div>
                 </div>
                 <div class="p-4 bg-background rounded-lg border border-border/50">
-                  <div class="text-4xl font-bold text-primary mb-2">{{ useDocentiStore().docenti }}</div>
+                  <div class="text-4xl font-bold text-primary mb-2">{{ useDocentiStore().docenti.length }}</div>
                   <div class="text-sm text-muted-foreground font-medium">Docenti Tutor</div>
                   <div class="text-xs text-muted-foreground/70 mt-1">In servizio</div>
                 </div>
                 <div class="p-4 bg-background rounded-lg border border-border/50">
-                  <div class="text-4xl font-bold text-primary mb-2">{{ useTirociniStore().tirocini }}</div>
+                  <div class="text-4xl font-bold text-primary mb-2">{{ useTirociniStore().tirocini.length }}</div>
                   <div class="text-sm text-muted-foreground font-medium">Tirocini in Corso</div>
                   <div class="text-xs text-muted-foreground/70 mt-1">Ore svolte</div>
                 </div>

@@ -16,7 +16,7 @@ export interface LoginCredentials {
 export interface NewUser {
   username: string
   password: string
-  livello: 'user' | 'reduced user'
+  livello: 'admin' | 'user' | 'reduced user'
 }
 
 export const useAuthStore = defineStore('auth', () => {
@@ -29,18 +29,21 @@ export const useAuthStore = defineStore('auth', () => {
     loading.value = true
     error.value = null
     try {
-      const formData = new FormData()
+      let params = undefined
       if(credentials !== undefined){
-        formData.append('username', credentials.username)
-        formData.append('password', credentials.password)
+        params = new URLSearchParams({ username: credentials.username, password: credentials.password });
       } else{
         return false
       }
 
       const response = await fetch('/api/login.php?log=login', {
         method: 'POST',
-        body: formData,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+        body: params.toString(),
       })
+
       const result = await response.json()
       if (result.ok) {
         user.value = {

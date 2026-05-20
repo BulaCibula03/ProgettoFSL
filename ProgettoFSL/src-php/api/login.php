@@ -11,10 +11,10 @@
         exit;
     }
 
-    $db=new mysqli($mysql_hostname, $mysql_username, $mysql_password, $mysql_db);
-    if($db->connect_error){
+    $DB=new mysqli($host, $user, $pw, $db);
+    if($DB->connect_error){
         http_response_code(500);
-        echo json_encode(["ok"=>false,"message"=>"Errore DB: ".$db->connect_errno." - ".$db->connect_error]);
+        echo json_encode(["ok"=>false,"message"=>"Errore DB: ".$DB->connect_errno." - ".$DB->connect_error]);
         exit;
     }
 
@@ -26,7 +26,7 @@
             echo json_encode(["ok"=>false,"message"=>"Username e password richiesti"]);
             exit;
         }
-        $stmt= $db->prepare("SELECT id, username, livello, password FROM utenti WHERE username=?");
+        $stmt= $DB->prepare("SELECT id, username, livello, password FROM utente WHERE username=?");
         $stmt->bind_param("s",$username);
         $stmt->execute();
         $result= $stmt->get_result();
@@ -64,5 +64,5 @@
         http_response_code(400);
         echo json_encode(["ok"=>false,"message"=>"Tipo di log non valido"]);
     }
-    $db->close();
+    $DB->close();
 ?>

@@ -22,11 +22,11 @@
             throw new Exception("Tipo mancante");
         }
         switch($tipo){
-            case "studente": $sql="SELECT * FROM studenti"; break;
-            case "docente": $sql="SELECT * FROM docenti"; break;
+            case "studente": $sql="SELECT * FROM studente"; break;
+            case "docente": $sql="SELECT * FROM docente"; break;
             case "corso": $sql="SELECT * FROM corso"; break;
-            case "azienda": $sql="SELECT * FROM aziende"; break;
-            case "tirocinio": $sql="SELECT * FROM tirocini"; break;
+            case "azienda": $sql="SELECT * FROM azienda"; break;
+            case "tirocinio": $sql="SELECT * FROM tirocinio"; break;
             case "slot": $sql="SELECT * FROM slot"; break;
             default:
                 throw new Exception("Tipo non valido");

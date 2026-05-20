@@ -17,8 +17,8 @@ import {
       <EmptyMedia variant="icon">
         <Cloud />
       </EmptyMedia>
-      <EmptyDescription>
-        Aggiungi delle tabelle al database
+      <EmptyDescription class="flex content-center">
+        Aggiungi dei dati alla tabella
       </EmptyDescription>
     </EmptyHeader>
   </Empty>

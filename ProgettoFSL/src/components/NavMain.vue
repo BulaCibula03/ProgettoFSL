@@ -37,33 +37,33 @@ async function loadTabella(title: string){
   switch(title){
     case "Studenti":
       //if(useStudentiStore().studenti.length===0) 
-      await useStudentiStore().fetchStudenti()
-      useCurrentTableStore().setCurrentTable("Studenti")
+      //await useStudentiStore().fetchStudenti()
+      await useCurrentTableStore().setCurrentTable("Studenti")
       break
     case "Docenti":
       //if(useDocentiStore().docenti.length===0) 
-      await useDocentiStore().fetchDocenti()
-      useCurrentTableStore().setCurrentTable("Docenti")
+      //await useDocentiStore().fetchDocenti()
+      await useCurrentTableStore().setCurrentTable("Docenti")
       break
     case "Tirocini":
       //if(useTirociniStore().tirocini.length===0) 
-      await useTirociniStore().fetchTirocini()
-      useCurrentTableStore().setCurrentTable("Tirocini")
+      //await useTirociniStore().fetchTirocini()
+      await useCurrentTableStore().setCurrentTable("Tirocini")
       break
     case "Aziende":
       //if(useAziendeStore().aziende.length===0) 
-      await useAziendeStore().fetchAziende()
-      useCurrentTableStore().setCurrentTable("Aziende")
+      //await useAziendeStore().fetchAziende()
+      await useCurrentTableStore().setCurrentTable("Aziende")
       break
     case "Slot":
       //if(useSlotStore().slot.length===0) 
-      await useSlotStore().fetchSlots()
-      useCurrentTableStore().setCurrentTable("Slot")
+      //await useSlotStore().fetchSlots()
+      await useCurrentTableStore().setCurrentTable("Slot")
       break
     case "Corsi":
       //if(useCorsiStore().corsi.length===0) 
-      await useCorsiStore().fetchCorsi()
-      useCurrentTableStore().setCurrentTable("Corsi")
+      //await useCorsiStore().fetchCorsi()
+      await useCurrentTableStore().setCurrentTable("Corsi")
       break
     default:
       console.log("Errore")
@@ -96,7 +96,7 @@ async function loadTabella(title: string){
                 <SidebarMenuSubItem v-for="subItem in item.items" :key="subItem.title">
                   <SidebarMenuSubButton as-child>
                     <a @click="loadTabella(subItem.title)">
-                      <span>{{ subItem.title }}</span>
+                      <span class="shadow-2xl shadow-blue-700">{{ subItem.title }}</span>
                     </a>
                   </SidebarMenuSubButton>
                 </SidebarMenuSubItem>
