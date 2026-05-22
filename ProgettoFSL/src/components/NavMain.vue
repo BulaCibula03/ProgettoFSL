@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from "vue"
 import { ChevronRight, type LucideIcon } from "lucide-vue-next"
 /* ------- Collapsible ------- */
 import {
@@ -32,6 +33,8 @@ defineProps<{
     }[]
   }[]
 }>()
+
+const classes = ref('')
 
 async function loadTabella(title: string){
   switch(title){
@@ -69,6 +72,7 @@ async function loadTabella(title: string){
       console.log("Errore")
       break
   }
+  return 
 }
 </script>
 
@@ -95,9 +99,9 @@ async function loadTabella(title: string){
               <SidebarMenuSub>
                 <SidebarMenuSubItem v-for="subItem in item.items" :key="subItem.title">
                   <SidebarMenuSubButton as-child>
-                    <a @click="loadTabella(subItem.title)">
+                    <button @click="loadTabella(subItem.title)" :id="subItem.title" >
                       <span class="shadow-2xl shadow-blue-700">{{ subItem.title }}</span>
-                    </a>
+                    </button>
                   </SidebarMenuSubButton>
                 </SidebarMenuSubItem>
               </SidebarMenuSub>
