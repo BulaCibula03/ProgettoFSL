@@ -17,8 +17,8 @@
         echo json_encode(["ok"=>false,"message"=>"Errore DB: ".$DB->connect_errno." - ".$DB->connect_error]);
         exit;
     }
-
-    if($_GET["log"] === "login"){
+    $log = $_GET["log"];
+    if($log === "login"){
         $username= $_POST["username"] ?? '';
         $password= $_POST["password"] ?? '';
         if(!$username||!$password){
@@ -44,13 +44,14 @@
             ]);
         }else{
             echo json_encode(["ok"=>false,"message"=>"Username o password errati"]);
+            exit;
         }
-    }else if($_GET["log"]==="logout"){
+    }else if($log==="logout"){
         session_unset();
         session_destroy();
         setcookie("PHPSESSID","",0,"/");
         echo json_encode(["ok"=>true]);
-    }else if($_GET["log"]==="checkLogin"){
+    }else if($log==="checkLogin"){
         if(!empty($_SESSION["loggedIn"]) && $_SESSION["loggedIn"]===true){
             echo json_encode([
                 "ok"=>true,
@@ -59,6 +60,7 @@
             ]);
         }else{
             echo json_encode(["ok"=>false]);
+            exit;
         }
     }else{
         http_response_code(400);
