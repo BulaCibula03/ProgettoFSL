@@ -2,8 +2,8 @@
     include "_noncachare.php";
     include "_db.php";
     include "_access.php";
-    header("Content-Type: application/json; charset=utf-8");
     session_start();
+    header("Content-Type: application/json; charset=utf-8");
 
     if(!isset($_GET["log"])){
         http_response_code(400);
@@ -17,8 +17,8 @@
         echo json_encode(["ok"=>false,"message"=>"Errore DB: ".$DB->connect_errno." - ".$DB->connect_error]);
         exit;
     }
-
-    if($_GET["log"] === "login"){
+    $log = $_GET["log"];
+    if($log === "login"){
         $username= $_POST["username"] ?? '';
         $password= $_POST["password"] ?? '';
         if(!$username||!$password){
@@ -30,27 +30,30 @@
         $stmt->bind_param("s",$username);
         $stmt->execute();
         $result= $stmt->get_result();
-        $user= $result->fetch_assoc();
-        if($user && password_verify($password, $user["password"])){
+        $utente= $result->fetch_assoc();
+        $stmt->close();
+        if($utente && password_verify($password, $utente["password"])){
             session_regenerate_id(true);
             $_SESSION["loggedIn"] = true;
-            $_SESSION["username"] = $user["username"];
-            $_SESSION["userId"] = $user["id"];
-            $_SESSION["livello"] = $user["livello"];
+            $_SESSION["username"] = $utente["username"];
+            $_SESSION["userId"] = $utente["id"];
+            $_SESSION["livello"] = $utente["livello"];
             echo json_encode([
                 "ok"=>true,
-                "username"=>$user["username"],
-                "livello"=>$user["livello"]
+                "username"=>$utente["username"],
+                "livello"=>$utente["livello"]
             ]);
         }else{
+            http_response_code(401);
             echo json_encode(["ok"=>false,"message"=>"Username o password errati"]);
+            exit;
         }
-    }else if($_GET["log"]==="logout"){
+    }else if($log==="logout"){
         session_unset();
         session_destroy();
         setcookie("PHPSESSID","",0,"/");
         echo json_encode(["ok"=>true]);
-    }else if($_GET["log"]==="checkLogin"){
+    }else if($log==="checkLogin"){
         if(!empty($_SESSION["loggedIn"]) && $_SESSION["loggedIn"]===true){
             echo json_encode([
                 "ok"=>true,
@@ -58,7 +61,9 @@
                 "livello"=>$_SESSION["livello"]
             ]);
         }else{
+            http_response_code(400);
             echo json_encode(["ok"=>false]);
+            exit;
         }
     }else{
         http_response_code(400);
