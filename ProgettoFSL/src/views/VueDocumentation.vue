@@ -3,6 +3,7 @@
 
 <template>
 <<<<<<< HEAD
+<div class="dark min-h-screen bg-background flex flex-col overflow-visible">
     <div class="documentazione">
         <h1>Documentazione</h1> <!--Funzionalità, introduzione-->
         <p>
@@ -36,6 +37,7 @@
             Questa è la sidebar che apre il menu a cascata per selezionare una tabella.<br>
         </p>
     </div>
+</div>
 =======
     <div class="dark min-h-screen bg-background flex flex-col overflow-visible"></div>
     <header class="border-b border-border bg-card sticky top-0 z-50">
