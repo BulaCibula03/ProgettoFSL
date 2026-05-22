@@ -2,8 +2,8 @@
     include "_noncachare.php";
     include "_db.php";
     include "_access.php";
-    header("Content-Type: application/json; charset=utf-8");
     session_start();
+    header("Content-Type: application/json; charset=utf-8");
 
     if(!isset($_GET["log"])){
         http_response_code(400);
@@ -30,19 +30,21 @@
         $stmt->bind_param("s",$username);
         $stmt->execute();
         $result= $stmt->get_result();
-        $user= $result->fetch_assoc();
-        if($user && password_verify($password, $user["password"])){
+        $utente= $result->fetch_assoc();
+        $stmt->close();
+        if($utente && password_verify($password, $utente["password"])){
             session_regenerate_id(true);
             $_SESSION["loggedIn"] = true;
-            $_SESSION["username"] = $user["username"];
-            $_SESSION["userId"] = $user["id"];
-            $_SESSION["livello"] = $user["livello"];
+            $_SESSION["username"] = $utente["username"];
+            $_SESSION["userId"] = $utente["id"];
+            $_SESSION["livello"] = $utente["livello"];
             echo json_encode([
                 "ok"=>true,
-                "username"=>$user["username"],
-                "livello"=>$user["livello"]
+                "username"=>$utente["username"],
+                "livello"=>$utente["livello"]
             ]);
         }else{
+            http_response_code(401);
             echo json_encode(["ok"=>false,"message"=>"Username o password errati"]);
             exit;
         }
@@ -59,6 +61,7 @@
                 "livello"=>$_SESSION["livello"]
             ]);
         }else{
+            http_response_code(400);
             echo json_encode(["ok"=>false]);
             exit;
         }
