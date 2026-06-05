@@ -4,7 +4,7 @@ export const iframeHeight = "800px"
 </script>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue"
+import { computed, onMounted, ref, watch, nextTick } from "vue"
 import { useCurrentTableStore } from "@/stores"
 /* ------- Components ------- */
 import EmptyTable from "@/components/EmptyTable.vue"
@@ -19,24 +19,35 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 /* ------- Code ------- */
-onMounted(() => {
-  
-})
+const tableStore = useCurrentTableStore()
 const loading = ref(false)
-const ricerca = ref<string>('');
-function cerca(query: string) {
-  const q = query.toLowerCase().trim();
+const ricerca = ref<string>('')
 
+const filteredData = computed(() => {
+  const q = ricerca.value.toLowerCase().trim()
+  
   if (!q) {
-    this.titles = this.allTitles;
-    return;
+    return tableStore.currentTable
   }
-  this.titles = this.allTitles.filter(
-    (t) =>
-        t.primary_title.toLowerCase().includes(q) ||
-        t.original_title.toLowerCase().includes(q)
-  );
-}
+  
+  return tableStore.currentTable.filter((row: any) => {
+    return Object.values(row).some((val: any) =>
+      String(val).toLowerCase().includes(q)
+    )
+  })
+})
+
+watch(
+  () => tableStore.currentTable,
+  async () => {
+    await nextTick()
+  }
+)
+
+onMounted(() => {
+  // Caricamento iniziale
+})
+
 </script>
 
 <template>
@@ -51,7 +62,7 @@ function cerca(query: string) {
             class="bg-white mr-2 data-[orientation=vertical]:h-4"
           />
         </div>
-        <Input @keyup="cerca()" placeholder="Cerca" class="text-white grow"/>
+        <Input v-model="ricerca" placeholder="Cerca" class="text-white grow"/>
       </header>
       <div class="overscroll-contain pt-18">
         <Table v-if="useCurrentTableStore().currentTable.length!==0"/>

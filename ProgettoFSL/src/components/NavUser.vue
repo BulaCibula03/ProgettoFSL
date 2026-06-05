@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useAuthStore } from "@/stores"
 import { useRouter } from "vue-router"
 /* ------- Lucide Vue Next ------- */
@@ -37,9 +38,29 @@ import {
 const router = useRouter()
 const avatar: string = "/avatars/shadcn.jpg"
 const { isMobile } = useSidebar()
-async function logout(){
-  await useAuthStore().logout()
-  router.push('/')
+const isLoggingOut = ref(false)
+
+async function handleLogout(){
+  if (isLoggingOut.value) return
+  
+  isLoggingOut.value = true
+  
+  try {
+    const success = await useAuthStore().logout()
+    if (success) {
+      await new Promise(r => setTimeout(r, 100))
+      router.push('/')
+    } else {
+      throw new Error('Logout failed')
+    }
+  } catch (error) {
+    console.error('Logout error:', error)
+    useAuthStore().user = { username: '', livello: '' }
+    useAuthStore().isLoggedIn = false
+    router.push('/')
+  } finally {
+    isLoggingOut.value = false
+  }
 }
 </script>
 
@@ -92,7 +113,13 @@ async function logout(){
           <DropdownMenuSeparator />
           <DropdownMenuItem>
             <LogOut />
-            <Button @click="logout()" >Log out</Button>
+            <button 
+              @click="handleLogout()"
+              :disabled="isLoggingOut"
+              class="ml-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {{ isLoggingOut ? 'Logout in corso...' : 'Log out' }}
+            </button>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

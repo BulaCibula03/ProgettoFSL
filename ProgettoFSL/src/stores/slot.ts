@@ -25,8 +25,11 @@ export const useSlotStore = defineStore('slot', () => {
   const slot = ref<Slot[]>([])
   const loading = ref(false)
   const error = ref<string | null>(null)
+  const totalCount = ref(0)
+  const currentPage = ref(0)
+  const pageSize = ref(100)
 
-  async function fetchSlots() {
+  async function fetchSlots(limit: number = 100, offset: number = 0) {
     loading.value = true
     error.value = null
     try {
@@ -35,11 +38,14 @@ export const useSlotStore = defineStore('slot', () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ type: 'slot' }),
+        body: JSON.stringify({ type: 'slot', limit, offset }),
       })
       const result = await response.json()
       if (result.success) {
         slot.value = result.data
+        totalCount.value = result.total
+        currentPage.value = offset / limit
+        pageSize.value = limit
       } else {
         error.value = result.error
       }
@@ -112,6 +118,9 @@ export const useSlotStore = defineStore('slot', () => {
     slot,
     loading,
     error,
+    totalCount,
+    currentPage,
+    pageSize,
     fetchSlots,
     createSlot,
     deleteSlot,

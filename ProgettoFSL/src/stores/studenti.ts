@@ -28,8 +28,11 @@ export const useStudentiStore = defineStore('studenti', () => {
   const studenti = ref<Studente[]>([])
   const loading = ref(false)
   const error = ref<string | null>(null)
+  const totalCount = ref(0)
+  const currentPage = ref(0)
+  const pageSize = ref(100)
 
-  async function fetchStudenti() {
+  async function fetchStudenti(limit: number = 100, offset: number = 0) {
     loading.value = true
     error.value = null
     try {
@@ -38,11 +41,14 @@ export const useStudentiStore = defineStore('studenti', () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ type: 'studente' }),
+        body: JSON.stringify({ type: 'studente', limit, offset }),
       })
       const result = await response.json()
       if (result.success) {
         studenti.value = result.data
+        totalCount.value = result.total
+        currentPage.value = offset / limit
+        pageSize.value = limit
       } else {
         error.value = result.error
       }
@@ -117,6 +123,9 @@ export const useStudentiStore = defineStore('studenti', () => {
     studenti,
     loading,
     error,
+    totalCount,
+    currentPage,
+    pageSize,
     fetchStudenti,
     createStudente,
     deleteStudente,

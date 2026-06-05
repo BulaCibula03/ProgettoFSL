@@ -10,8 +10,11 @@ export const useTirociniStore = defineStore('tirocini', () => {
   const tirocini = ref<Tirocinio[]>([])
   const loading = ref(false)
   const error = ref<string | null>(null)
+  const totalCount = ref(0)
+  const currentPage = ref(0)
+  const pageSize = ref(100)
 
-  async function fetchTirocini() {
+  async function fetchTirocini(limit: number = 100, offset: number = 0) {
     loading.value = true
     error.value = null
     try {
@@ -20,11 +23,14 @@ export const useTirociniStore = defineStore('tirocini', () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ type: 'tirocinio' }),
+        body: JSON.stringify({ type: 'tirocinio', limit, offset }),
       })
       const result = await response.json()
       if (result.success) {
         tirocini.value = result.data
+        totalCount.value = result.total
+        currentPage.value = offset / limit
+        pageSize.value = limit
       } else {
         error.value = result.error
       }
@@ -69,6 +75,9 @@ export const useTirociniStore = defineStore('tirocini', () => {
     tirocini,
     loading,
     error,
+    totalCount,
+    currentPage,
+    pageSize,
     fetchTirocini,
     deleteTirocinio,
   }

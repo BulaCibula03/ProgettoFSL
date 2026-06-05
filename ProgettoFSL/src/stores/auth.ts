@@ -1,7 +1,7 @@
 import LoginForm from '@/components/new-york-v4/blocks/login-01/components/LoginForm.vue';
 import type { LucideIcon } from 'lucide-vue-next';
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 
 export interface User {
   username: string
@@ -24,10 +24,17 @@ export const useAuthStore = defineStore('auth', () => {
   const loading = ref(false)
   const error = ref<string | null>(null)
   const isLoggedIn = ref(false)
+  const lastAuthCheck = ref<number>(0)
+  
+  // Previeni check multipli - cache per 30 secondi
+  const shouldCheckAuth = computed(() => {
+    return Date.now() - lastAuthCheck.value > 30000
+  })
 
   async function login(credentials: LoginCredentials | undefined) {
     loading.value = true
     error.value = null
+    
     try {
       let params = undefined
       if(credentials !== undefined){
@@ -70,11 +77,13 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       const response = await fetch('/api/login.php?log=logout', {
         method: 'POST',
+        credentials: 'include',
       })
       const result = await response.json()
       if (result.ok) {
         user.value = { username: "", livello: "" }
         isLoggedIn.value = false
+        lastAuthCheck.value = 0 // Reset cache timestamp
         return true
       } else {
         error.value = 'Errore durante il logout'
@@ -89,13 +98,22 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function checkLogin() {
+    // Se cache è ancora valido e non è il primo check, salta
+    if (!shouldCheckAuth.value && lastAuthCheck.value > 0) {
+      return isLoggedIn.value
+    }
+    
     loading.value = true
     error.value = null
     try {
       const response = await fetch('/api/login.php?log=checkLogin', {
         method: 'POST',
+        credentials: 'include',
       })
+      
       const result = await response.json()
+      lastAuthCheck.value = Date.now() // Update cache timestamp
+      
       if (result.ok) {
         user.value = {
           username: result.username,
@@ -104,12 +122,13 @@ export const useAuthStore = defineStore('auth', () => {
         isLoggedIn.value = true
         return true
       } else {
-        user.value = { username: "", livello: "" }
         isLoggedIn.value = false
+        user.value = { username: "", livello: "" }
         return false
       }
     } catch (e) {
-      error.value = 'Errore di connessione'
+      error.value = 'Errore connessione'
+      isLoggedIn.value = false
       return false
     } finally {
       loading.value = false
@@ -149,6 +168,8 @@ export const useAuthStore = defineStore('auth', () => {
     loading,
     error,
     isLoggedIn,
+    lastAuthCheck,
+    shouldCheckAuth,
     login,
     logout,
     checkLogin,

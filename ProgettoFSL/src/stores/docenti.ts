@@ -19,8 +19,11 @@ export const useDocentiStore = defineStore('docenti', () => {
   const docenti = ref<Docente[]>([])
   const loading = ref(false)
   const error = ref<string | null>(null)
+  const totalCount = ref(0)
+  const currentPage = ref(0)
+  const pageSize = ref(100)
 
-  async function fetchDocenti() {
+  async function fetchDocenti(limit: number = 100, offset: number = 0) {
     loading.value = true
     error.value = null
     try {
@@ -29,11 +32,14 @@ export const useDocentiStore = defineStore('docenti', () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ type: 'docente' }),
+        body: JSON.stringify({ type: 'docente', limit, offset }),
       })
       const result = await response.json()
       if (result.success) {
         docenti.value = result.data
+        totalCount.value = result.total
+        currentPage.value = offset / limit
+        pageSize.value = limit
       } else {
         error.value = result.error
       }
@@ -108,6 +114,9 @@ export const useDocentiStore = defineStore('docenti', () => {
     docenti,
     loading,
     error,
+    totalCount,
+    currentPage,
+    pageSize,
     fetchDocenti,
     createDocente,
     deleteDocente,

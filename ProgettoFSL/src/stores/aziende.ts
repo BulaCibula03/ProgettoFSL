@@ -37,8 +37,11 @@ export const useAziendeStore = defineStore('aziende', () => {
   const aziende = ref<Azienda[]>([])
   const loading = ref(false)
   const error = ref<string | null>(null)
+  const totalCount = ref(0)
+  const currentPage = ref(0)
+  const pageSize = ref(100)
 
-  async function fetchAziende() {
+  async function fetchAziende(limit: number = 100, offset: number = 0) {
     loading.value = true
     error.value = null
     try {
@@ -47,11 +50,14 @@ export const useAziendeStore = defineStore('aziende', () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ type: 'azienda' }),
+        body: JSON.stringify({ type: 'azienda', limit, offset }),
       })
       const result = await response.json()
       if (result.success) {
         aziende.value = result.data
+        totalCount.value = result.total
+        currentPage.value = offset / limit
+        pageSize.value = limit
       } else {
         error.value = result.error
       }
@@ -125,6 +131,9 @@ export const useAziendeStore = defineStore('aziende', () => {
     aziende,
     loading,
     error,
+    totalCount,
+    currentPage,
+    pageSize,
     fetchAziende,
     createAzienda,
     deleteAzienda,

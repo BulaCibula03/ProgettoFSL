@@ -4,27 +4,30 @@ import { useCorsiStore, useAziendeStore, useDocentiStore, useSlotStore, useTiroc
 
 export const useCurrentTableStore = defineStore("currentTable", () => {
   const currentTable = ref<any>(useCorsiStore().corsi)
+  const currentTableType = ref<string>("Corsi")
+  
   async function setCurrentTable(table: string){
+    currentTableType.value = table
     switch(table){
       case "Corsi": 
-        currentTable.value = [...useCorsiStore().corsi]
+        currentTable.value = useCorsiStore().corsi
         break
       case "Aziende": 
-        currentTable.value = [...useAziendeStore().aziende]
+        currentTable.value = useAziendeStore().aziende
         break
       case "Docenti": 
-        currentTable.value = [...useDocentiStore().docenti]
+        currentTable.value = useDocentiStore().docenti
         break
-      case "Slot": 
-        currentTable.value = [...useSlotStore().slot]
+      case "Slot":
+        currentTable.value = useSlotStore().slot
         break
       case "Tirocini": 
-        currentTable.value = [...useTirociniStore().tirocini]
+        currentTable.value = useTirociniStore().tirocini
         break
       case "Studenti": 
-        currentTable.value = [...useStudentiStore().studenti]
+        currentTable.value = useStudentiStore().studenti
         break
     }
   }
-  return { currentTable, setCurrentTable }
+  return { currentTable, currentTableType, setCurrentTable }
 });

@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -12,11 +13,13 @@ const router = createRouter({
       path: '/dashboard',
       name: 'Dashboard',
       component: () => import('../views/VueDashboard.vue')
+      // meta: { requiresAuth: true } // DISABILITATO PER TESTING
     },
     {
       path: '/admin',
       name: 'Admin',
-      component: () => import('../views/VueAdmin.vue')
+      component: () => import('../views/VueAdmin.vue'),
+      meta: { requiresAuth: true }
     },
     {
       path: '/login',
@@ -39,5 +42,26 @@ const router = createRouter({
     },
   ],
 })
+
+// Global navigation guard
+/*router.beforeEach(async (to, from, next) => {
+  const authStore = useAuthStore()
+  const requiresAuth = to.matched.some(r => r.meta.requiresAuth)
+  
+  if (!requiresAuth) {
+    return next()
+  }
+  
+  if (!authStore.isLoggedIn && authStore.lastAuthCheck === 0) {
+    const isAuth = await authStore.checkLogin()
+    if (!isAuth) {
+      return next('/login')
+    }
+  } else if (!authStore.isLoggedIn) {
+    return next('/login')
+  }
+  
+  next()
+})*/
 
 export default router

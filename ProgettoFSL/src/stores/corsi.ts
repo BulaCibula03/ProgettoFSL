@@ -20,8 +20,11 @@ export const useCorsiStore = defineStore('corsi', () => {
   const corsi = ref<Corso[]>([])
   const loading = ref(false)
   const error = ref<string | null>(null)
+  const totalCount = ref(0)
+  const currentPage = ref(0)
+  const pageSize = ref(100)
 
-  async function fetchCorsi() {
+  async function fetchCorsi(limit: number = 100, offset: number = 0) {
     loading.value = true
     error.value = null
     try {
@@ -30,11 +33,14 @@ export const useCorsiStore = defineStore('corsi', () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ type: 'corso' }),
+        body: JSON.stringify({ type: 'corso', limit, offset }),
       })
       const result = await response.json()
       if (result.success) {
         corsi.value = result.data
+        totalCount.value = result.total
+        currentPage.value = offset / limit
+        pageSize.value = limit
       } else {
         error.value = result.error
       }
@@ -109,6 +115,9 @@ export const useCorsiStore = defineStore('corsi', () => {
     corsi,
     loading,
     error,
+    totalCount,
+    currentPage,
+    pageSize,
     fetchCorsi,
     createCorso,
     deleteCorso,

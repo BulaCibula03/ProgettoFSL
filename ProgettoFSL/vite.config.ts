@@ -23,7 +23,7 @@ export default defineConfig({
         target: 'http://localhost/',
         changeOrigin: true,
         secure: false,
-        //rewrite: (path) => path.replace(/^\/api/, ''),
+        cookieDomainRewrite: "localhost",
       }
     }
   }

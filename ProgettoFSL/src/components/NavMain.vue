@@ -39,33 +39,33 @@ const classes = ref('')
 async function loadTabella(title: string){
   switch(title){
     case "Studenti":
-      //if(useStudentiStore().studenti.length===0) 
-      //await useStudentiStore().fetchStudenti()
+      if(useStudentiStore().studenti.length===0) 
+        await useStudentiStore().fetchStudenti()
       await useCurrentTableStore().setCurrentTable("Studenti")
       break
     case "Docenti":
-      //if(useDocentiStore().docenti.length===0) 
-      //await useDocentiStore().fetchDocenti()
+      if(useDocentiStore().docenti.length===0) 
+        await useDocentiStore().fetchDocenti()
       await useCurrentTableStore().setCurrentTable("Docenti")
       break
     case "Tirocini":
-      //if(useTirociniStore().tirocini.length===0) 
-      //await useTirociniStore().fetchTirocini()
+      if(useTirociniStore().tirocini.length===0) 
+        await useTirociniStore().fetchTirocini()
       await useCurrentTableStore().setCurrentTable("Tirocini")
       break
     case "Aziende":
-      //if(useAziendeStore().aziende.length===0) 
-      //await useAziendeStore().fetchAziende()
+      if(useAziendeStore().aziende.length===0) 
+        await useAziendeStore().fetchAziende()
       await useCurrentTableStore().setCurrentTable("Aziende")
       break
     case "Slot":
-      //if(useSlotStore().slot.length===0) 
-      //await useSlotStore().fetchSlots()
+      if(useSlotStore().slot.length===0) 
+        await useSlotStore().fetchSlots(100, 0)
       await useCurrentTableStore().setCurrentTable("Slot")
       break
     case "Corsi":
-      //if(useCorsiStore().corsi.length===0) 
-      //await useCorsiStore().fetchCorsi()
+      if(useCorsiStore().corsi.length===0) 
+        await useCorsiStore().fetchCorsi()
       await useCurrentTableStore().setCurrentTable("Corsi")
       break
     default:
