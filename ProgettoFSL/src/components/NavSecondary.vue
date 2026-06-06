@@ -24,10 +24,10 @@ const props = defineProps<{
       <SidebarMenu>
         <SidebarMenuItem v-for="item in items" :key="item.title">
           <SidebarMenuButton as-child size="sm" class="dark:bg-slate-900 dark:text-white">
-            <RouterLink :to="item.url">
+            <Routerlink :to="item.url">
               <component :is="item.icon" />
               <span>{{ item.title }}</span>
-            </RouterLink>
+            </Routerlink>
           </SidebarMenuButton>
         </SidebarMenuItem>
       </SidebarMenu>
