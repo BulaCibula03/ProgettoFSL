@@ -23353,7 +23353,7 @@ INSERT INTO `tut_tir` (`id`, `idTutor`, `idTirocinio`, `dal`, `al`) VALUES
 CREATE TABLE `utente` (
   `id` bigint(20) NOT NULL,
   `username` varchar(256) NOT NULL,
-  `password` varchar(8) NOT NULL,
+  `password` varchar(256) NOT NULL,
   `livello` varchar(256) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 

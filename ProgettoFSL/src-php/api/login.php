@@ -1,8 +1,8 @@
 <?php
+    session_start();
     include "_noncachare.php";
     include "_db.php";
     include "_access.php";
-    session_start();
     header("Content-Type: application/json; charset=utf-8");
 
     if(!isset($_GET["log"])){
@@ -61,7 +61,7 @@
                 "livello"=>$_SESSION["livello"]
             ]);
         }else{
-            http_response_code(400);
+            http_response_code(200);
             echo json_encode(["ok"=>false]);
             exit;
         }

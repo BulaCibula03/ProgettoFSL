@@ -1,9 +1,9 @@
 <?php
+    session_start();
     include "_noncachare.php";
     include "_db.php";
     include "_access.php";
     header("Content-Type: application/json; charset=utf-8");
-    session_start();
 
     if($_GET["op"]==="addUser"){
         $db=new mysqli($mysql_hostname, $mysql_username, $mysql_password, $mysql_db);

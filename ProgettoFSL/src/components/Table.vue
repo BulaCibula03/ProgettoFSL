@@ -55,6 +55,26 @@ function updateTableHeaders() {
   }
 }
 
+// Aggiorna headers quando cambia il tipo di tabella
+watch(
+  () => currentTableStore.currentTableType,
+  () => {
+    tableHeaders.value = []
+    updateTableHeaders()
+  }
+)
+
+// Aggiorna headers quando arrivano i dati
+watch(
+  () => currentTableStore.currentTable,
+  (newData) => {
+    if (newData.length > 0) {
+      updateTableHeaders()
+    }
+  },
+  { immediate: true }
+)
+
 async function loadNextPage() {
   const tableType = currentTableStore.currentTableType
   const nextOffset = (currentPage.value + 1) * pageSize
@@ -108,86 +128,89 @@ async function deleteRow(id: number) {
 </script>
 
 <template>
-  <div class="w-full p-6 space-y-4">
-    <div class="rounded-lg border border-slate-700 bg-slate-900/50 overflow-hidden shadow-lg h-[calc(100vh-16rem)] flex flex-col">
-      <Table class="text-slate-300 w-full flex-1 flex flex-col">
-        <TableHeader class="bg-slate-800 hover:bg-slate-800 border-b border-slate-700 sticky top-0 z-5 flex-shrink-0">
-          <TableRow>
-            <TableHead v-for="header in tableHeaders" :key="header" class="font-semibold text-slate-200 px-6 py-4">
-              {{ header }}
-            </TableHead>
-            <TableHead class="font-semibold text-slate-200 px-6 py-4 text-right">Azioni</TableHead>
-          </TableRow>
-        </TableHeader>
+  <div class="w-full p-6">
+    <div class="rounded-lg border border-slate-700 bg-slate-900/50 shadow-lg flex flex-col h-[calc(100vh-10rem)] overflow-hidden">
+
+      <!-- Wrapper con scroll orizzontale condiviso -->
+      <div class="flex-1 overflow-x-auto overflow-y-hidden flex flex-col">
         
-        <RecycleScroller 
-          v-if="visibleRows.length > 0"
-          :items="visibleRows"
-          :item-size="65"
-          class="flex-1 overflow-y-auto"
-          @scroll-end="loadNextPage"
-        >
-          <template #default="{ item }">
-            <TableRow 
-              class="border-b border-slate-700 hover:bg-slate-800/50 transition-colors h-16"
-            >
-              <TableCell 
-                v-for="header in tableHeaders" 
-                :key="header"
-                class="px-6 py-4 text-slate-300"
-              >
-                <span v-if="(item as any)[header]" class="truncate max-w-xs inline-block">
-                  {{ String((item as any)[header]).substring(0, 100) }}{{ String((item as any)[header]).length > 100 ? '...' : '' }}
-                </span>
-                <span v-else class="text-slate-500 italic">-</span>
-              </TableCell>
-              <TableCell class="px-6 py-4 text-right">
-                <DropdownMenu>
-                  <DropdownMenuTrigger as-child>
-                    <Button 
-                      variant="ghost" 
-                      size="sm"
-                      class="h-8 w-8 p-0 hover:bg-slate-700 hover:text-red-400"
-                      :disabled="isLoading"
-                    >
-                      <span class="sr-only">Apri menu</span>
-                      <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M10.5 1.5H9.5V3h1V1.5zM10.5 16h-1v1.5h1V16zM16 9.5v1h1.5v-1H16zM1.5 10.5H3v-1H1.5v1z"/>
-                        <circle cx="10" cy="10" r="1.5"/>
-                      </svg>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" class="w-32 bg-slate-800 border-slate-700 text-slate-200">
-                    <DropdownMenuItem 
-                      @click="deleteRow((item as any).id)"
-                      class="cursor-pointer focus:bg-red-900/30 focus:text-red-400 text-red-400"
-                      :disabled="isLoading"
-                    >
-                      Elimina
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </TableCell>
-            </TableRow>
-          </template>
-        </RecycleScroller>
+        <!-- Larghezza minima fissa per tutto -->
+        <div class="min-w-max flex flex-col h-full">
 
-        <div v-else class="text-center py-8 text-slate-400 flex-1 flex items-center justify-center">
-          Nessun dato disponibile
-        </div>
+          <!-- Header -->
+          <div class="flex bg-slate-800 border-b border-slate-700 flex-shrink-0">
+            <div v-for="header in tableHeaders" :key="header"
+              class="w-44 flex-shrink-0 font-semibold text-slate-200 px-4 py-4 text-sm">
+              {{ header }}
+            </div>
+            <div class="w-20 flex-shrink-0 font-semibold text-slate-200 px-4 py-4 text-right text-sm">
+              Azioni
+            </div>
+          </div>
 
-        <TableFooter class="bg-slate-800 border-t border-slate-700 flex-shrink-0">
-          <TableRow>
-            <TableCell :colspan="tableHeaders.length + 1" class="px-6 py-4">
-              <div class="flex justify-between items-center">
-                <span class="text-slate-200 font-medium">Righe Totali</span>
-                <span class="text-slate-100 font-semibold">{{ currentTableStore.currentTable.length }} / {{ slotStore.totalCount || currentTableStore.currentTable.length }}</span>
+          <!-- Righe -->
+          <RecycleScroller
+            v-if="visibleRows.length > 0"
+            :key="currentTableStore.currentTableType"
+            :items="visibleRows"
+            :item-size="56"
+            key-field="id"
+            class="flex-1 overflow-y-auto"
+            style="min-width: max-content"
+            @scroll-end="loadNextPage"
+          >
+            <template #default="{ item }">
+              <div class="flex border-b border-slate-700 hover:bg-slate-800/50 transition-colors items-center h-14">
+                <div v-for="header in tableHeaders" :key="header"
+                  class="w-44 flex-shrink-0 px-4 py-3 text-slate-300 text-sm truncate">
+                  <span v-if="(item as any)[header] !== null && (item as any)[header] !== undefined && (item as any)[header] !== ''">
+                    {{ String((item as any)[header]).substring(0, 80) }}{{ String((item as any)[header]).length > 80 ? '…' : '' }}
+                  </span>
+                  <span v-else class="text-slate-500 italic">-</span>
+                </div>
+                <div class="w-20 flex-shrink-0 px-4 py-3 text-right">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger as-child>
+                      <Button variant="ghost" size="sm"
+                        class="h-8 w-8 p-0 hover:bg-slate-700 hover:text-red-400"
+                        :disabled="isLoading">
+                        <span class="sr-only">Apri menu</span>
+                        <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                          <circle cx="10" cy="4"  r="1.5"/>
+                          <circle cx="10" cy="10" r="1.5"/>
+                          <circle cx="10" cy="16" r="1.5"/>
+                        </svg>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" class="w-32 bg-slate-800 border-slate-700 text-slate-200">
+                      <DropdownMenuItem
+                        @click="deleteRow((item as any).id)"
+                        class="cursor-pointer focus:bg-red-900/30 focus:text-red-400 text-red-400"
+                        :disabled="isLoading">
+                        Elimina
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
               </div>
-            </TableCell>
-          </TableRow>
-        </TableFooter>
-      </Table>
+            </template>
+          </RecycleScroller>
+
+          <div v-else class="text-center py-8 text-slate-400 flex-1 flex items-center justify-center">
+            Nessun dato disponibile
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="bg-slate-800 border-t border-slate-700 flex-shrink-0 px-6 py-4 flex justify-between items-center">
+        <span class="text-slate-200 font-medium text-sm">Righe Totali</span>
+        <span class="text-slate-100 font-semibold text-sm">
+          {{ currentTableStore.currentTable.length }} / {{ slotStore.totalCount || currentTableStore.currentTable.length }}
+        </span>
+      </div>
+
     </div>
   </div>
 </template>
-

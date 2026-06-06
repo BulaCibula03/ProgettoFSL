@@ -70,7 +70,9 @@
     } catch (Exception $e) {
         http_response_code(400);
         echo json_encode([
-            "success"=>false,
-            "error"=>$e->getMessage()
+            "success" => false,
+            "error" => $e->getMessage(),
+            "raw" => file_get_contents("php://input"),
+            "data" => $data ?? null
         ]);
     }
