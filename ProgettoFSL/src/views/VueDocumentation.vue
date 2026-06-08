@@ -42,6 +42,34 @@
         </p>
       </div>
     </div>
+
+    <h2 class="text-xl font-semibold text-white mb-4">Operazioni sulle tabelle</h2>
+    <p class="text-slate-300 leading-relaxed mb-6">
+      Ogni tabella supporta due operazioni principali: l'aggiunta di nuovi record e l'eliminazione di quelli esistenti.
+    </p>
+    <div class="flex flex-col gap-4 mb-12">
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <p class="text-green-400 font-medium mb-2">+ Aggiunta di un record</p>
+        <p class="text-slate-400 text-sm leading-relaxed">
+          In basso a destra nella tabella è presente il pulsante <span class="text-white font-medium">+ Nuovo</span>.
+          Cliccandolo si apre un pannello laterale con un form compilabile contenente tutti i campi
+          disponibili per la tabella selezionata. Una volta compilati i campi desiderati, premere
+          <span class="text-white font-medium">Salva</span> per inserire il record nel database.
+          La tabella si aggiornerà automaticamente.
+        </p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-5">
+        <p class="text-red-400 font-medium mb-2">Eliminazione di un record</p>
+        <p class="text-slate-400 text-sm leading-relaxed">
+          Su ogni riga della tabella è presente un pulsante con tre puntini
+          <span class="text-white font-medium">⋮</span> nella colonna <span class="text-white font-medium">Azioni</span>.
+          Cliccandolo si apre un menu a tendina: selezionare <span class="text-red-400 font-medium">Elimina</span>
+          per rimuovere definitivamente il record dal database.
+          L'operazione è irreversibile — verificare prima di procedere.
+        </p>
+      </div>
+    </div>
+
     <h2 class="text-xl font-semibold text-white mb-6">Interfaccia utente</h2>
     <div class="flex flex-col gap-6">
       <div class="bg-slate-800 border border-slate-700 rounded-xl overflow-hidden">
