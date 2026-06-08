@@ -1,33 +1,49 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useCorsiStore, useAziendeStore, useDocentiStore, useSlotStore, useTirociniStore, useStudentiStore} from "./index";
 
 export const useCurrentTableStore = defineStore("currentTable", () => {
-  const currentTable = ref<any>(useCorsiStore().corsi)
+  const currentTableOG = ref<any>(useCorsiStore().corsi)
   const currentTableType = ref<string>("Corsi")
+  const searchQuery = ref<string>("")
+
+  const currentTable = computed(() => {
+    const q = searchQuery.value.toLowerCase().trim()
+    if (!q) return currentTableOG.value
+    return currentTableOG.value.filter((row: any) =>
+      Object.values(row).some((val: any) =>
+        String(val).toLowerCase().includes(q)
+      )
+    )
+  })
+
+  function filterTable(query: string) {
+    searchQuery.value = query
+  }
   
   async function setCurrentTable(table: string){
+    searchQuery.value = ""
     currentTableType.value = table
     switch(table){
-      case "Corsi": 
-        currentTable.value = useCorsiStore().corsi
+      case "Corsi":
+        currentTableOG.value = useCorsiStore().corsi
         break
-      case "Aziende": 
-        currentTable.value = useAziendeStore().aziende
+      case "Aziende":
+        currentTableOG.value = useAziendeStore().aziende
         break
-      case "Docenti": 
-        currentTable.value = useDocentiStore().docenti
+      case "Docenti":
+        currentTableOG.value = useDocentiStore().docenti
         break
       case "Slot":
-        currentTable.value = useSlotStore().slot
+        currentTableOG.value = useSlotStore().slot
         break
       case "Tirocini": 
-        currentTable.value = useTirociniStore().tirocini
+        currentTableOG.value = useTirociniStore().tirocini
         break
       case "Studenti": 
-        currentTable.value = useStudentiStore().studenti
+        currentTableOG.value = useStudentiStore().studenti
         break
     }
   }
-  return { currentTable, currentTableType, setCurrentTable }
+  return { currentTable, currentTableOG, currentTableType, filterTable, setCurrentTable }
 });

@@ -12,8 +12,8 @@ const router = createRouter({
     {
       path: '/dashboard',
       name: 'Dashboard',
-      component: () => import('../views/VueDashboard.vue')
-      // meta: { requiresAuth: true } // DISABILITATO PER TESTING
+      component: () => import('../views/VueDashboard.vue'),
+      //meta: { requiresAuth: true }
     },
     {
       path: '/admin',

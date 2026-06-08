@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
+import moment from 'moment';
 
 export interface Docente {
   id?: number
@@ -40,6 +41,10 @@ export const useDocentiStore = defineStore('docenti', () => {
         totalCount.value = result.total
         currentPage.value = offset / limit
         pageSize.value = limit
+        let docente: any
+        for(docente in docenti.value){
+          docente.data_nascita = moment(docente.data_nascita).format('YYYY-MM-DD, hh:mm:ss')
+        }
       } else {
         error.value = result.error
       }

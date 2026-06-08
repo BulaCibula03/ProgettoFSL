@@ -23,18 +23,8 @@ const tableStore = useCurrentTableStore()
 const loading = ref(false)
 const ricerca = ref<string>('')
 
-const filteredData = computed(() => {
-  const q = ricerca.value.toLowerCase().trim()
-  
-  if (!q) {
-    return tableStore.currentTable
-  }
-  
-  return tableStore.currentTable.filter((row: any) => {
-    return Object.values(row).some((val: any) =>
-      String(val).toLowerCase().includes(q)
-    )
-  })
+watch(ricerca, (val) => {
+  tableStore.filterTable(val)
 })
 
 watch(
@@ -62,7 +52,8 @@ onMounted(() => {
             class="bg-white mr-2 data-[orientation=vertical]:h-4"
           />
         </div>
-        <Input v-model="ricerca" placeholder="Cerca" class="text-white grow"/>
+        <Input v-model="ricerca" placeholder="Cerca" class="text-white mr-3 max-w-255"/>
+        <button class="text-white bg-slate-900 px-4 py-1.5 rounded-lg border-1 border-slate-800 mr-3 w-32"><i class="fa-solid fa-plus">+ Add</i></button>
       </header>
       <div class="overscroll-contain pt-18">
         <Table v-if="useCurrentTableStore().currentTable.length!==0"/>

@@ -2,7 +2,7 @@
 import { type HTMLAttributes, ref } from "vue"
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { useRouter } from "vue-router"
+import router from "@/router/index"
 import { useAuthStore, type LoginCredentials } from "@/stores/auth"
 /* ------- Card ------- */
 import {
@@ -24,7 +24,6 @@ const props = defineProps<{
   class?: HTMLAttributes["class"]
 }>()
 
-const router = useRouter()
 const user = ref<LoginCredentials>({ username: "", password: "" })
 async function submit(){
   await useAuthStore().login(user.value)
