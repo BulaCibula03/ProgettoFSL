@@ -2,7 +2,6 @@
 /* ------- Virtual Scroller ------- */
 import { RecycleScroller } from 'vue-virtual-scroller'
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
-import { ArrowLeft, ArrowRight } from 'lucide-vue-next'
 /* ------- Table Components ------- */
 import {
   Table,
@@ -30,6 +29,11 @@ import { useAziendeStore } from '@/stores/aziende'
 import { useTirociniStore } from '@/stores/tirocini'
 import { useSlotStore } from '@/stores/slot'
 import { onMounted, ref, watch, computed } from 'vue'
+/* ----- Create Dialog ----- */
+import CreateDialog from '@/components/CreateDialog.vue'
+
+// Props: rows viene passato dal parent (filteredData)
+const props = defineProps<{ rows: any[] }>()
 
 const currentTableStore = useCurrentTableStore()
 const studentiStore = useStudentiStore()
@@ -43,7 +47,9 @@ const tableHeaders = ref<string[]>([])
 const isLoading = ref(false)
 const currentPage = ref(1)
 const pageSize = 100
-const visibleRows = computed(() => currentTableStore.currentTable)
+const showCreateDialog = ref(false)
+
+const visibleRows = computed(() => props.rows)
 
 const canGoToPreviousPage = computed(() => currentPage.value > 1)
 const canGoToNextPage = computed(() => {
@@ -79,12 +85,14 @@ onMounted(() => {
 })
 
 function updateTableHeaders() {
-  if (currentTableStore.currentTable.length > 0) {
-    const firstRow = currentTableStore.currentTable[0]
+  const source = props.rows.length > 0 ? props.rows : currentTableStore.currentTable
+  if (source.length > 0) {
+    const firstRow = source[0]
     tableHeaders.value = Object.keys(firstRow).filter(key => key !== 'id')
   }
 }
 
+// Aggiorna headers quando cambia il tipo di tabella
 watch(
   () => currentTableStore.currentTableType,
   () => {
@@ -93,8 +101,9 @@ watch(
   }
 )
 
+// Aggiorna headers quando arrivano i dati
 watch(
-  () => currentTableStore.currentTable,
+  () => props.rows,
   (newData) => {
     if (newData.length > 0) {
       updateTableHeaders()
@@ -203,6 +212,7 @@ async function deleteRow(id: number) {
     }
 
     if (success) {
+      await currentTableStore.setCurrentTable(tableType)
       updateTableHeaders()
     }
   } catch (error) {
@@ -211,12 +221,10 @@ async function deleteRow(id: number) {
     isLoading.value = false
   }
 }
-
-
 </script>
 
 <template>
-  <div class="max-w-6xl mx-auto h-full px-4 py-6">
+  <div class="w-full p-6">
     <div class="rounded-lg border border-slate-700 bg-slate-900/50 shadow-lg flex flex-col h-[calc(100vh-10rem)] overflow-hidden">
 
       <!-- Wrapper con scroll orizzontale condiviso -->
@@ -256,11 +264,11 @@ async function deleteRow(id: number) {
                   </span>
                   <span v-else class="text-slate-500 italic">-</span>
                 </div>
-                <div class="w-20 flex-shrink-0 px-4 py-3 text-right text-white">
+                <div class="w-20 flex-shrink-0 px-4 py-3 text-right">
                   <DropdownMenu>
                     <DropdownMenuTrigger as-child>
                       <Button variant="ghost" size="sm"
-                        class="h-8 w-8 p-0 hover:bg-white hover:text-red-400"
+                        class="h-8 w-8 p-0 text-red-400 hover:bg-slate-700 hover:text-orange-400"
                         :disabled="isLoading">
                         <span class="sr-only">Apri menu</span>
                         <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
@@ -277,12 +285,6 @@ async function deleteRow(id: number) {
                         :disabled="isLoading">
                         Elimina
                       </DropdownMenuItem>
-                      <!--<DropdownMenuItem
-                        @click="modifyRow((item as any).id)"
-                        class="cursor-pointer focus:bg-red-900/30 focus:text-red-400 text-red-400"
-                        :disabled="isLoading">
-                        Modifica
-                      </DropdownMenuItem>-->
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </div>
@@ -328,6 +330,10 @@ async function deleteRow(id: number) {
           <ArrowRight class="w-4 h-4" />
         </button>
       </div>
+
     </div>
   </div>
+
+  <!-- Create Dialog -->
+  <CreateDialog v-model:open="showCreateDialog" />
 </template>

@@ -6,7 +6,6 @@
 
     header("Content-Type: application/json; charset=utf-8");
 
-    // SECURITY: Verifica autenticazione PRIMA di qualsiasi operazione
     /*if (empty($_SESSION['loggedIn']) || !isset($_SESSION['username'])) {
         http_response_code(401);
         echo json_encode([
@@ -34,7 +33,7 @@
         }
         
         $limit = isset($data["limit"]) ? intval($data["limit"]) : 100;
-        $limit = min($limit, 200); // Previene abusi di memoria
+        $limit = min($limit, 9999);
         $offset = isset($data["offset"]) ? intval($data["offset"]) : 0;
         
         switch($tipo){
@@ -44,6 +43,16 @@
             case "azienda": $sql="SELECT * FROM azienda"; break;
             case "tirocinio": $sql="SELECT * FROM tirocinio"; break;
             case "slot": $sql="SELECT * FROM slot"; break;
+            case "corso_modo": $sql="SELECT * FROM corso_modo"; break;
+            case "corso_tipo": $sql="SELECT * FROM corso_tipo"; break;
+            case "slottipo": $sql="SELECT * FROM slottipo"; break;
+            case "slotimpiego": $sql="SELECT * FROM slotimpiego"; break;
+            case "azienda_tipo": $sql="SELECT * FROM azienda_tipo"; break;
+            case "docente_tipo": $sql="SELECT * FROM docente_tipo"; break;
+            case "comune": $sql="SELECT * FROM comune"; break;
+            case "luogo": $sql="SELECT * FROM luogo"; break;
+            case "famiglia": $sql="SELECT * FROM famiglia"; break;
+            case "classi": $sql="SELECT * FROM classi"; break;
             default:
                 throw new Exception("Tipo non valido");
         }
