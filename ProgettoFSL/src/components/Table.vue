@@ -41,9 +41,38 @@ const slotStore = useSlotStore()
 
 const tableHeaders = ref<string[]>([])
 const isLoading = ref(false)
-const currentPage = ref(0)
+const currentPage = ref(1)
 const pageSize = 100
 const visibleRows = computed(() => currentTableStore.currentTable)
+
+const canGoToPreviousPage = computed(() => currentPage.value > 1)
+const canGoToNextPage = computed(() => {
+  const tableType = currentTableStore.currentTableType
+  let totalCount = 0
+  
+  switch (tableType) {
+    case 'Corsi':
+      totalCount = corsiStore.totalCount
+      break
+    case 'Aziende':
+      totalCount = aziendeStore.totalCount
+      break
+    case 'Docenti':
+      totalCount = docentiStore.totalCount
+      break
+    case 'Slot':
+      totalCount = slotStore.totalCount
+      break
+    case 'Tirocini':
+      totalCount = tirociniStore.totalCount
+      break
+    case 'Studenti':
+      totalCount = studentiStore.totalCount
+      break
+  }
+  
+  return (currentPage.value * pageSize) < totalCount
+})
 
 onMounted(() => {
   updateTableHeaders()
@@ -75,100 +104,72 @@ watch(
 )
 
 async function loadNextPage() {
+  if (!canGoToNextPage.value) return
+  
   const tableType = currentTableStore.currentTableType
-  const nextOffset = (currentPage.value + 1) * pageSize
+  const nextPage = currentPage.value + 1
+  const nextOffset = (nextPage - 1) * pageSize
   
   try {
     switch (tableType) {
       case 'Corsi':
-        if (nextOffset < corsiStore.totalCount) {
-          await corsiStore.fetchCorsi(pageSize, nextOffset)
-          currentPage.value += 1
-        }
-        break;
+        await corsiStore.fetchCorsi(pageSize, nextOffset)
+        break
       case 'Aziende':
-        if (nextOffset < aziendeStore.totalCount) {
-          await aziendeStore.fetchAziende(pageSize, nextOffset)
-          currentPage.value += 1
-        }
-        break;
+        await aziendeStore.fetchAziende(pageSize, nextOffset)
+        break
       case 'Docenti':
-        if (nextOffset < docentiStore.totalCount) {
-          await docentiStore.fetchDocenti(pageSize, nextOffset)
-          currentPage.value += 1
-        }
-        break;
+        await docentiStore.fetchDocenti(pageSize, nextOffset)
+        break
       case 'Slot':
-        if (nextOffset < slotStore.totalCount) {
-          await slotStore.fetchSlots(pageSize, nextOffset)
-          currentPage.value += 1
-        }
-        break;
+        await slotStore.fetchSlots(pageSize, nextOffset)
+        break
       case 'Tirocini':
-        if (nextOffset < tirociniStore.totalCount) {
-          await tirociniStore.fetchTirocini(pageSize, nextOffset)
-          currentPage.value += 1
-        }
-        break;
+        await tirociniStore.fetchTirocini(pageSize, nextOffset)
+        break
       case 'Studenti':
-        if (nextOffset < studentiStore.totalCount) {
-          await studentiStore.fetchStudenti(pageSize, nextOffset)
-          currentPage.value += 1
-        }
-        break;
+        await studentiStore.fetchStudenti(pageSize, nextOffset)
+        break
       default:
         console.error('Tabella non valida:', tableType)
     }
+    currentPage.value = nextPage
   } catch (error) {
     console.error('Errore durante il caricamento della pagina successiva:', error)
   }
 }
 
 async function loadPreviousPage() {
+  if (!canGoToPreviousPage.value) return
+  
   const tableType = currentTableStore.currentTableType
-  const previousOffset = (currentPage.value - 1) * pageSize
+  const previousPage = currentPage.value - 1
+  const previousOffset = (previousPage - 1) * pageSize
   
   try {
     switch (tableType) {
       case 'Corsi':
-        if (previousOffset >= 0) {
-          await corsiStore.fetchCorsi(pageSize, previousOffset)
-          currentPage.value -= 1
-        }
-        break;
+        await corsiStore.fetchCorsi(pageSize, previousOffset)
+        break
       case 'Aziende':
-        if (previousOffset >= 0) {
-          await aziendeStore.fetchAziende(pageSize, previousOffset)
-          currentPage.value -= 1
-        }
-        break;
+        await aziendeStore.fetchAziende(pageSize, previousOffset)
+        break
       case 'Docenti':
-        if (previousOffset >= 0) {
-          await docentiStore.fetchDocenti(pageSize, previousOffset)
-          currentPage.value -= 1
-        }
-        break;
+        await docentiStore.fetchDocenti(pageSize, previousOffset)
+        break
       case 'Slot':
-        if (previousOffset >= 0) {
-          await slotStore.fetchSlots(pageSize, previousOffset)
-          currentPage.value -= 1
-        }
-        break;
+        await slotStore.fetchSlots(pageSize, previousOffset)
+        break
       case 'Tirocini':
-        if (previousOffset >= 0) {
-          await tirociniStore.fetchTirocini(pageSize, previousOffset)
-          currentPage.value -= 1
-        }
-        break;
+        await tirociniStore.fetchTirocini(pageSize, previousOffset)
+        break
       case 'Studenti':
-        if (previousOffset >= 0) {
-          await studentiStore.fetchStudenti(pageSize, previousOffset)
-          currentPage.value -= 1
-        }
-        break;
+        await studentiStore.fetchStudenti(pageSize, previousOffset)
+        break
       default:
         console.error('Tabella non valida:', tableType)
     }
+    currentPage.value = previousPage
   } catch (error) {
     console.error('Errore durante il caricamento della pagina precedente:', error)
   }
@@ -298,13 +299,34 @@ async function deleteRow(id: number) {
 
       <!-- Footer -->
       <div class="bg-slate-800 border-t border-slate-700 flex-shrink-0 px-6 py-4 flex justify-between items-center">
-        <span class="text-slate-200 font-medium text-sm">Righe Totali</span>
-        <span class="text-slate-100 font-semibold text-sm">
-          {{ currentTableStore.currentTable.length }}
+        <span class="text-slate-200 font-medium text-sm">
+          Totale Records: 
+          <span class="text-slate-100 font-semibold">
+            {{ 
+              currentTableStore.currentTableType === 'Corsi' ? corsiStore.totalCount :
+              currentTableStore.currentTableType === 'Aziende' ? aziendeStore.totalCount :
+              currentTableStore.currentTableType === 'Docenti' ? docentiStore.totalCount :
+              currentTableStore.currentTableType === 'Slot' ? slotStore.totalCount :
+              currentTableStore.currentTableType === 'Tirocini' ? tirociniStore.totalCount :
+              currentTableStore.currentTableType === 'Studenti' ? studentiStore.totalCount : 0
+            }}
+          </span>
         </span>
-        <ArrowLeft @click="loadPreviousPage" />
-        <span class="text-slate-200 font-medium text-sm">Pagina {{ currentPage }}</span>
-        <ArrowRight @click="loadNextPage" />
+        <button 
+          @click="loadPreviousPage" 
+          :disabled="!canGoToPreviousPage || isLoading"
+          class="p-2 rounded hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+          <ArrowLeft class="w-4 h-4" />
+        </button>
+        <span class="text-slate-200 font-medium text-sm">
+          Pagina <span class="text-slate-100 font-semibold">{{ currentPage }}</span>
+        </span>
+        <button 
+          @click="loadNextPage" 
+          :disabled="!canGoToNextPage || isLoading"
+          class="p-2 rounded hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+          <ArrowRight class="w-4 h-4" />
+        </button>
       </div>
     </div>
   </div>
